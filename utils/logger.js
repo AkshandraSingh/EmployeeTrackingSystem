@@ -23,10 +23,10 @@ const logger = createLogger({
         }),
         new transports.MongoDB({
             level: "info",
-            db: 'mongodb://127.0.0.1:27017/EmployeeAttenceTraking',
-            // options: {
-            //     useUnifedTopology: true,
-            // },
+            db: process.env.URL,
+            options: {
+                useUnifedTopology: true,
+            },
             collection: 'logData',
             format: format.combine(format.timestamp(), format.json())
         })

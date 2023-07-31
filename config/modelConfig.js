@@ -1,9 +1,6 @@
 let mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/EmployeeAttenceTraking',{
-    useNewUrlParser: true,
-    useUnifiedTopology: true, // Add this line to use the new engine
-});
+mongoose.connect(process.env.URL,{useNewUrlParser: true,});
 
 mongoose.connection.on('connected',()=>{
     console.log("MongoDB Connection is Done!!")
