@@ -10,7 +10,7 @@ const empSchema = new mongoose.Schema({
         requied: true
     },
     empPhone: {
-        type: String,
+        type: Number,
         requied: true
     },
     empPassword: {
