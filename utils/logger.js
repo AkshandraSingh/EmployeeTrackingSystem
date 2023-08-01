@@ -21,15 +21,15 @@ const logger = createLogger({
                 format.printf(info => `level ${info.level}: ${info.timestamp} ${info.message}`)
             ),
         }),
-        new transports.MongoDB({
-            level: "info",
-            db: process.env.URL,
-            options: {
-                useUnifedTopology: true,
-            },
-            collection: 'logData',
-            format: format.combine(format.timestamp(), format.json())
-        })
+        // new transports.MongoDB({
+        //     level: "info",
+        //     db: process.env.URL,
+        //     options: {
+        //         useUnifedTopology: true,
+        //     },
+        //     collection: 'logData',
+        //     format: format.combine(format.timestamp(), format.json())
+        // })
     ]
 })
 

@@ -12,6 +12,6 @@ const serverLink = `Server Started on http://${HOST}:${PORT}`
 app.use(express.json())
 
 app.listen(PORT,()=>{
-    console.log("Express server listening on port ",PORT)
+    console.log("Express server listening on Port: ",PORT)
     logger.info(serverLink)
 })
