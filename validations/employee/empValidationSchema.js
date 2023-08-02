@@ -68,11 +68,11 @@ const empSchema = {
     }).unknown(true),
 
     loginEmployee: joi.object({
-        userEmail: joi
+        empEmail: joi
             .string()
             .email()
             .required(),
-        userPassword: joi
+        empPassword: joi
             .string()
     }).unknown(true),
 
