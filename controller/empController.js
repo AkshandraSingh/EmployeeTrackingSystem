@@ -45,47 +45,33 @@ module.exports = {
         }
     },
     // ? Login Employee
-    employeeLogin: async (req, res) => {
+    empLogIn: async (req, res) => {
+        const { empEmail, empPassword } = req.body
         try {
-            const empData = await empSchema.findOne({ empEmail: req.body.empEmail })
-            if (empData) {
-                const hashpassword = await bcrypt.compare(req.body.empPassword, empData.empPassword)
-                if (empData && hashpassword) {
-                    const token = jwt.sign({ empData }, process.env.SECRET_KEY, {
-                        expiresIn: "1h",
-                    })
-                    employeeLogger.log('info', "Login Successfully ✔")
-                    res.status(200).send({
-                        success: true,
-                        message: 'Login Successfully ✔',
-                        token: token
-                    })
-                }
-                else {
-                    employeeLogger.log('error', "Email or Password is Incorrect")
-                    res.status(401).send({
-                        success: false,
-                        message: 'Email or Password is Incorrect'
-                    })
-                }
-            }
-            else {
-                employeeLogger.log('error', "Email Not Exist")
-                res.status(403).send({
+            let { value, token } = await authService.validateEmployee(empEmail, empPassword)
+            if (value) {
+                employeeLogger.log("info", "Employee logged in successfully");
+                res.status(200).json({
+                    success: true,
+                    message: "Employee logged in successfully",
+                    accessToken: token
+                });
+            } else {
+                employeeLogger.log("error", "Email or password is not valid");
+                res.status(401).json({
                     success: false,
-                    message: 'Email Not Exist'
-                })
+                    message: "Email or password is not valid",
+                });
             }
-        }
-        catch (err) {
-            employeeLogger.log('error', `Error: ${err}`)
-            res.send({
+        } catch (error) {
+            employeeLogger.log("error", error.message);
+            res.status(500).json({
                 success: false,
-                message: err.message
-            })
+                message: error.message,
+            });
         }
     },
-    // ? Sending Em For Rest Password
+    // ? Sending Email For Rest Password
     empSendEmailForResetPassword: async (req, res) => {
         const { empEmail } = req.body
         try {

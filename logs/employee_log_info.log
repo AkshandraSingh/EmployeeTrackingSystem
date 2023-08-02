@@ -88,3 +88,7 @@ level error: Aug-02-2023 18:53:35 	Error: Error: data and hash arguments require
 level error: Aug-02-2023 18:55:38 	Error: Error: data and hash arguments required
 level error: Aug-02-2023 19:02:17 	Error: Error: data and hash arguments required
 level info: Aug-02-2023 19:06:12 	Login Successfully ✔
+level error: Aug-02-2023 20:29:41 	bcrypt is not defined
+level error: Aug-02-2023 20:30:09 	data and hash arguments required
+level error: Aug-02-2023 20:31:15 	data and hash arguments required
+level info: Aug-02-2023 20:33:13 	Employee logged in successfully
