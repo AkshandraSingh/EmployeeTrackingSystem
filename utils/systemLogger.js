@@ -12,7 +12,7 @@ const logger = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
         new transports.File({
-            filename: 'logs/system_log_info.log',
+            filename: 'logs/log.info.log',
             level: "info",
             maxsize: 5242880,
             format: format.combine(

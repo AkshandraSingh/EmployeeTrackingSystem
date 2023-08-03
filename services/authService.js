@@ -16,22 +16,27 @@ module.exports = {
         return value
     },
     // ! It is For Checking Email is Valid or Not and Compareing Password and also Genrating Token .
-    validateEmployee: async (empEmail, empPassword) => {
+    validateEmployee: async (empEmail, empPassword, hashType = 0) => {
         let value = false;
-        let token = "";
-        const empData = await empSchema.findOne({ // ? Checking is Email exist in DataBase or Not .
-            empEmail: empEmail,
-        });
-        if (empData) {
-            const hashPassword = await bcrypt.compare( // ! Compareing Password .
-                empPassword,
-                empData.empPassword
-            )
-            if (empData && hashPassword) {
-                token = await jwt.sign({ empId: empData._id }, process.env.SECRET_KEY, { expiresIn: "1h" }) // ! Genrating Token
-                value = true
+        let generatedToken = "";
+        const empData = await empSchema.findOne({ empEmail: empEmail });
+
+        if (hashType === 0) {
+            if (empData) {
+                generatedToken = await jwt.sign({ empId: empData._id }, process.env.SECRET_KEY, { expiresIn: "1h" });
+                value = true;
+            }
+        } else {
+            if (empData) {
+                const hashPassword = await bcrypt.compare(empPassword, empData.empPassword);
+                if (hashPassword) {
+                    generatedToken = await jwt.sign({ empId: empData._id }, process.env.SECRET_KEY, { expiresIn: "1h" });
+                    value = true;
+                }
             }
         }
-        return { value, token }
+
+        return { value, generatedToken, empData };
     }
+
 }

@@ -13,7 +13,9 @@ const HOST = "localhost";
 const PORT = process.env.PORT || 8000
 const serverLink = `Server Started on http://${HOST}:${PORT}`
 
-app.listen(PORT,()=>{
+const server = app.listen(PORT,()=>{
     console.log("Express server listening on Port: ",PORT)
     logger.info(serverLink)
 })
+
+module.exports = server

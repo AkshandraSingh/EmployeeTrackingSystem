@@ -73,34 +73,26 @@ module.exports = {
     },
     // ? Sending Email For Rest Password
     empSendEmailForResetPassword: async (req, res) => {
-        const { empEmail } = req.body
+        const { empEmail } = req.body;
+
         try {
-            const empData = await empSchema.findOne({
-                empEmail: req.body.empEmail
-            });
-            if (empData != null) {
-                const secret = empData._id + process.env.SECRET_KEY;
-                const token = jwt.sign({ userID: empData._id }, secret, { expiresIn: "1h" })
-                const link = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${token}`
-                let info = await transporter.sendMail({ // ? It Send Email on User Email .
-                    from: "nameste380@gmail.com",
-                    to: empEmail,
-                    subject: "It is For Reset the Password",
-                    html: `<a href=${link}>click Here For Rest Password`
-                });
-                employeeLogger.log('info', "Email Sended Successfully ❤")
+            let {generatedToken, empData } = await authService.validateEmployee(empEmail, req.body.empPassword, 1);
+
+            if (empData) {
+                const link = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
+                employeeLogger.log('info', "Email Sent Successfully ❤")
                 res.status(201).json({
                     success: true,
-                    message: "Email Sended Successfully ❤",
-                    token: token,
+                    message: "Email Sent Successfully ❤",
+                    token: generatedToken,
                     userID: empData._id
-                })
+                });
             } else {
-                employeeLogger.log('error', "Not Vaild Email")
+                employeeLogger.log('error', "Invalid credentials")
                 res.status(403).json({
                     success: false,
-                    message: "Not Vaild Email"
-                })
+                    message: "Invalid credentials"
+                });
             }
         } catch (error) {
             employeeLogger.log('error', `Error: ${error}`)
@@ -110,10 +102,11 @@ module.exports = {
             });
         }
     },
+
     // ? Employee Reset Paasword
     empResetPassword: async (req, res) => {
         const { id, token } = req.params;
-        const { newPassword, confirmPassword } = req.body;
+        const { newPassword, confirmPassword} = req.body;
         try {
             const checkEmployee = await empSchema.findById(id);
             if (checkEmployee != null) {

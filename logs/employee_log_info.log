@@ -92,3 +92,22 @@ level error: Aug-02-2023 20:29:41 	bcrypt is not defined
 level error: Aug-02-2023 20:30:09 	data and hash arguments required
 level error: Aug-02-2023 20:31:15 	data and hash arguments required
 level info: Aug-02-2023 20:33:13 	Employee logged in successfully
+level error: Aug-02-2023 20:57:41 	Employee Already Exists With This Email
+level info: Aug-02-2023 20:57:46 	Employee Created Successfully
+level error: Aug-02-2023 21:04:11 	Employee Already Exists With This Email
+level info: Aug-02-2023 21:05:28 	Employee Created Successfully
+level error: Aug-02-2023 21:05:51 	Employee Already Exists With This Email
+level error: Aug-02-2023 21:09:35 	Employee Already Exists With This Email
+level info: Aug-03-2023 16:11:52 	Email Sended Successfully ❤
+level error: Aug-03-2023 16:44:40 	Cannot access 'empData' before initialization
+level info: Aug-03-2023 16:50:12 	Employee logged in successfully
+level info: Aug-03-2023 16:50:57 	Employee logged in successfully
+level info: Aug-03-2023 17:13:12 	Password Updeted
+level info: Aug-03-2023 17:13:23 	Employee logged in successfully
+level info: Aug-03-2023 17:13:36 	Password Updeted
+level info: Aug-03-2023 17:13:46 	Employee logged in successfully
+level error: Aug-03-2023 17:13:56 	Email or password is not valid
+level info: Aug-03-2023 17:14:00 	Employee logged in successfully
+level info: Aug-03-2023 17:14:49 	Password Updeted
+level info: Aug-03-2023 17:21:40 	Password Updeted
+level info: Aug-03-2023 17:21:44 	Employee logged in successfully

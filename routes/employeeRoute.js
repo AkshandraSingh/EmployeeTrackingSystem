@@ -10,8 +10,8 @@ router.post('/create', registerEmployee , singupEmployee)
 // ? Login Employee API .
 router.post('/empLogin', loginEmpValidation, empLogIn)
 // ? Sending Email For Rest Password API .
-router.post('/emailForReset', resetPasswordValidation , empSendEmailForResetPassword)
+router.post('/emailForReset', empSendEmailForResetPassword)
 // ? Reset Password For Employee API .
-router.post('/empResetPassword/:id/:token', empResetPassword)
+router.post('/empResetPassword/:id/:token', resetPasswordValidation ,empResetPassword)
 
 module.exports = router
