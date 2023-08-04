@@ -5,13 +5,13 @@ const { registerEmployee, loginEmpValidation, resetPasswordValidation } = requir
 
 const router = express.Router()
 
-// ? Sinup Employee API .
+// ! Sinup Employee API .
 router.post('/create', registerEmployee , singupEmployee)
-// ? Login Employee API .
+// ! Login Employee API .
 router.post('/empLogin', loginEmpValidation, empLogIn)
-// ? Sending Email For Rest Password API .
+// ! Sending Email For Rest Password API .
 router.post('/emailForReset', empSendEmailForResetPassword)
-// ? Reset Password For Employee API .
+// ! Reset Password For Employee API .
 router.post('/empResetPassword/:id/:token', resetPasswordValidation ,empResetPassword)
 
 module.exports = router

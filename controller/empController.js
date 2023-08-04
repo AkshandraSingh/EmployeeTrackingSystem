@@ -1,10 +1,9 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
 
-const empSchema = require("../model/empSchema")
-const { transporter } = require('../services/emailService')
-const employeeLogger = require('../utils/employeeLogger')
-const authService = require('../services/authService')
+const empSchema = require("../model/empSchema");
+const { transporter } = require('../services/emailService');
+const employeeLogger = require('../utils/employeeLogger');
+const authService = require('../services/authService');
 
 module.exports = {
     // ? Create Employee
@@ -48,13 +47,13 @@ module.exports = {
     empLogIn: async (req, res) => {
         const { empEmail, empPassword } = req.body
         try {
-            let { value, token } = await authService.validateEmployee(empEmail, empPassword)
+            let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword)
             if (value) {
                 employeeLogger.log("info", "Employee logged in successfully");
                 res.status(200).json({
                     success: true,
                     message: "Employee logged in successfully",
-                    accessToken: token
+                    accessToken: generatedToken
                 });
             } else {
                 employeeLogger.log("error", "Email or password is not valid");
@@ -74,12 +73,16 @@ module.exports = {
     // ? Sending Email For Rest Password
     empSendEmailForResetPassword: async (req, res) => {
         const { empEmail } = req.body;
-
         try {
-            let {generatedToken, empData } = await authService.validateEmployee(empEmail, req.body.empPassword, 1);
-
+            let { generatedToken, empData } = await authService.validateEmployee(empEmail);
             if (empData) {
                 const link = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
+                let info = await transporter.sendMail({
+                    from: "nameste380@gmail.com",
+                    to: empEmail,
+                    subject: "email for employee reset password",
+                    html: `<a href=${link}>click Here For Rest Password`
+                });
                 employeeLogger.log('info', "Email Sent Successfully ❤")
                 res.status(201).json({
                     success: true,

@@ -111,3 +111,18 @@ level info: Aug-03-2023 17:14:00 	Employee logged in successfully
 level info: Aug-03-2023 17:14:49 	Password Updeted
 level info: Aug-03-2023 17:21:40 	Password Updeted
 level info: Aug-03-2023 17:21:44 	Employee logged in successfully
+level error: Aug-03-2023 17:25:30 	Error: Error: data and hash arguments required
+level error: Aug-03-2023 17:26:26 	Invalid credentials
+level error: Aug-03-2023 17:27:30 	Invalid credentials
+level error: Aug-03-2023 17:28:38 	Invalid credentials
+level info: Aug-03-2023 17:33:23 	Email Sent Successfully ❤
+level info: Aug-03-2023 17:41:32 	Email Sent Successfully ❤
+level info: Aug-04-2023 11:49:19 	Employee Created Successfully
+level error: Aug-04-2023 11:50:54 	Cannot access 'empData' before initialization
+level info: Aug-04-2023 11:51:20 	Employee logged in successfully
+level info: Aug-04-2023 11:53:09 	Employee logged in successfully
+level info: Aug-04-2023 11:53:19 	Email Sent Successfully ❤
+level info: Aug-04-2023 11:54:23 	Password Updeted
+level error: Aug-04-2023 11:54:35 	Email or password is not valid
+level error: Aug-04-2023 11:54:47 	Email or password is not valid
+level info: Aug-04-2023 11:55:12 	Employee logged in successfully
