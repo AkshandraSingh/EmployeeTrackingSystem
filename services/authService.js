@@ -16,7 +16,7 @@ module.exports = {
         return value
     },
     // ! It is For Checking Email is Valid or Not and Compareing Password and also Genrating Token .
-    validateEmployee: async (empEmail,hashType = 0) => {
+    validateEmployee: async (empEmail, hashType = 0) => {
         let value = false;
         const empData = await empSchema.findOne({ empEmail: empEmail });
         let generatedToken = await jwt.sign({ empId: empData._id }, process.env.SECRET_KEY, { expiresIn: "1h" });

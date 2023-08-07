@@ -12,6 +12,6 @@ router.post('/empLogin', loginEmpValidation, empLogIn)
 // ! Sending Email For Rest Password API .
 router.post('/emailForReset', empSendEmailForResetPassword)
 // ! Reset Password For Employee API .
-router.post('/empResetPassword/:id/:token', resetPasswordValidation ,empResetPassword)
+router.patch('/empResetPassword/:id/:token', resetPasswordValidation ,empResetPassword)
 
 module.exports = router

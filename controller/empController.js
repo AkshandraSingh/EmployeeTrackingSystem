@@ -1,32 +1,32 @@
 const bcrypt = require('bcrypt');
 
 const empSchema = require("../model/empSchema");
-const { transporter } = require('../services/emailService');
-const employeeLogger = require('../utils/employeeLogger');
-const authService = require('../services/authService');
+const { transporter } = require('../services/emailService'); // * It is For Send Email .
+const employeeLogger = require('../utils/employeeLogger'); // * Employee Logger for Save Information and Errors .
+const authService = require('../services/authService'); // * Some Services .
 
 module.exports = {
     // ? Create Employee
     singupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
-        const salt = await bcrypt.genSalt(10)
+        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
         try {
-            let isEmailExist = await authService.isEmployeeExist(req.body.empEmail)
+            let isEmailExist = await authService.isEmployeeExist(req.body.empEmail) // ! Checking is Email Exist or Not .
             if (isEmailExist) {
-                employeeLogger.log("error", "Employee Already Exists With This Email")
+                employeeLogger.log("error", "Employee Already Exists With This Email") // ? It Save Info in Employee log /
                 res.status(401).send({
                     success: false,
                     message: 'Employee Already Exists With This Email',
                 });
             }
             else {
-                if (empData.empGender == 'male') {
+                if (empData.empGender == 'male') { // ! It Check if Employee Gender is Male so It Give a Male Avtar .
                     empData.empProfile = 'C:/Users/workspace/Employee Attendence Traking System/upload/maleAvatar.png'
-                } else {
+                } else { // ! It Check if Employee Gender is Female so It Give a Female Avtar .
                     empData.empProfile = 'C:/Users/workspace/Employee Attendence Traking System/upload/femaleAvatar.png'
                 }
-                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt)
-                const employee = await empData.save()
+                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It Incrupt the Password .
+                const employee = await empData.save() // ? Save in DataBase .
                 employeeLogger.log('info', "Employee Created Successfully")
                 res.status(201).json({
                     success: true,
@@ -45,9 +45,9 @@ module.exports = {
     },
     // ? Login Employee
     empLogIn: async (req, res) => {
-        const { empEmail, empPassword } = req.body
+        const { empEmail, empPassword } = req.body // ! Taking these Parameter by Body .
         try {
-            let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword)
+            let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword) // ! Genrateing the Token and Ckeck is Email Exist or Not .
             if (value) {
                 employeeLogger.log("info", "Employee logged in successfully");
                 res.status(200).json({
@@ -55,7 +55,7 @@ module.exports = {
                     message: "Employee logged in successfully",
                     accessToken: generatedToken
                 });
-            } else {
+            } else { // ? It Show When Password is Incorrect .
                 employeeLogger.log("error", "Email or password is not valid");
                 res.status(401).json({
                     success: false,
@@ -72,12 +72,12 @@ module.exports = {
     },
     // ? Sending Email For Rest Password
     empSendEmailForResetPassword: async (req, res) => {
-        const { empEmail } = req.body;
+        const { empEmail } = req.body; // ? Taking Employee Email Form Body .
         try {
             let { generatedToken, empData } = await authService.validateEmployee(empEmail);
             if (empData) {
                 const link = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
-                let info = await transporter.sendMail({
+                let info = await transporter.sendMail({ // ! Sending the Email using Transpoter .
                     from: "nameste380@gmail.com",
                     to: empEmail,
                     subject: "email for employee reset password",
@@ -109,7 +109,7 @@ module.exports = {
     // ? Employee Reset Paasword
     empResetPassword: async (req, res) => {
         const { id, token } = req.params;
-        const { newPassword, confirmPassword} = req.body;
+        const { newPassword, confirmPassword } = req.body;
         try {
             const checkEmployee = await empSchema.findById(id);
             if (checkEmployee != null) {

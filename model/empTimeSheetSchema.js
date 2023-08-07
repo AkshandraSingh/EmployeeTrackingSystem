@@ -3,51 +3,58 @@ const mongoose = require('mongoose')
 const empTimeSheetSchema = new mongoose.Schema({
     clockIn: {
         type: String,
-        requied: true
+        default: ""
     },
     clockOut: {
         type: String,
-        requied: true
+        default: ""
     },
     clockinIP: {
         type: String,
-        requied: true
+        default: ""
     },
     hoursLoggedIn: {
         type: Number,
-        requied: true
+        default: 0
     },
     workingFrom: {
         type: String,
-        requied: true
+        default: "",
     },
     totalWrokingDays: {
         type: String,
-        requied: true
+        default: "0"
     },
     dayPresent: {
         type: String,
-        requied: true
+        default: "0"
     },
     halfDay: {
         type: Number,
-        requied: true
+        default: "0"
     },
     dayAbsent: {
         type: String,
-        requied: true
+        default: "0"
+
     },
     holidays: {
         type: String,
-        requied: true
+        default: "0"
+
     },
     dayLate: {
         type: String,
-        requied: true
+        default: "0"
     },
-    status: {
-        type: Number,
-        requied: true
+    status: { // ! Absent , Present and Leave
+        type: String,
+        default: "absent"
+    },
+    empId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'employee',
+        required: true
     },
     isActive: {
         type: Boolean,
