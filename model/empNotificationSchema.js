@@ -22,4 +22,4 @@ const empNotificationSchema = mongoose.Schema({
 
 empNotificationSchema.set('timestamps', true) 
 
-module.exports = mongoose.model('empleaves',empNotificationSchema)
+module.exports = mongoose.model('notification',empNotificationSchema)

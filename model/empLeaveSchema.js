@@ -1,24 +1,33 @@
 const mongoose = require('mongoose')
 
-const empLeaves = mongoose.Schema({
+const empLeaves = new mongoose.Schema({
     cusalLeaves: {
-        type: String,
-        required: true
+        type: Number,
+        default: 10
     },
     sickLeave: {
-        type: String,
-        required: true
+        type: Number,
+        default: 10
     },
-    leaveType: {
-        type: String,
-        required: true
+    totalLeave: {
+        type: Number,
+        default: 0
     },
-    status: {
+    leaveType: { // ! Casual , SickLeave and Other .
         type: String,
-        required: true
+        default: "casual"
+    },
+    status: { // ! Pending , approve and reject .
+        type: String,
+        default: "pending"
     },
     message: {
         type: String,
+        default: ""
+    },
+    empId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'employee',
         required: true
     },
     isActive: {
@@ -29,4 +38,4 @@ const empLeaves = mongoose.Schema({
 
 empLeaves.set('timestamps', true) 
 
-module.exports = mongoose.model('notification',empLeaves)
+module.exports = mongoose.model('empLeave',empLeaves)

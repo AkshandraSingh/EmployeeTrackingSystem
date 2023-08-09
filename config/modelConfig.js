@@ -1,5 +1,5 @@
 const mongoose = require('mongoose'); 
-const logger = require('../utils/systemLogger')
+const logger = require('../utils/logger')
 
 mongoose.connect(process.env.URL, { useNewUrlParser: true });
 

@@ -19,11 +19,11 @@ const empTimeSheetSchema = new mongoose.Schema({
     },
     workingFrom: {
         type: String,
-        default: "",
+        default: "office",
     },
     totalWrokingDays: {
-        type: String,
-        default: "0"
+        type: Number,
+        default: 0
     },
     dayPresent: {
         type: String,
@@ -45,9 +45,9 @@ const empTimeSheetSchema = new mongoose.Schema({
     },
     dayLate: {
         type: String,
-        default: "0"
+        default: ""
     },
-    status: { // ! Absent , Present and Leave
+    status: { // ! Absent , Present and HalfDay
         type: String,
         default: "absent"
     },

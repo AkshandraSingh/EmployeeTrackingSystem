@@ -1,6 +1,6 @@
 require('dotenv').config()
 let express = require('express');
-let logger = require('./utils/systemLogger')
+let logger = require('./utils/logger')
 
 require('./config/modelConfig')
 let commanRouter = require('./routes/mainRoute')
