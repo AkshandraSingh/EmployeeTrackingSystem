@@ -30,6 +30,8 @@ module.exports = {
                     leaveInfo: leaveData,
                 });
             }
+            leaveData.startDate = req.body.startDate;
+            leaveData.endDate = req.body.endDate;
         } catch (error) {
             empLeaveLogger.log('error',"Error Occor")
             res.status(500).send({

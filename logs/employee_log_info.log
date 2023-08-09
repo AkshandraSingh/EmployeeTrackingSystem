@@ -134,3 +134,12 @@ level info: Aug-04-2023 12:09:53 	Employee Created Successfully
 level info: Aug-04-2023 12:10:31 	Employee Created Successfully
 level error: Aug-07-2023 16:52:45 	Employee Already Exists With This Email
 level info: Aug-07-2023 16:52:50 	Employee Created Successfully
+level info: Aug-09-2023 16:58:49 	Employee Created Successfully
+level info: Aug-09-2023 17:13:24 	Employee logged in successfully
+level info: Aug-09-2023 18:11:41 	Employee logged in successfully
+level error: Aug-09-2023 18:18:09 	Email or password is not valid
+level info: Aug-09-2023 18:18:50 	Employee Created Successfully
+level info: Aug-09-2023 18:19:21 	Employee logged in successfully
+level info: Aug-09-2023 18:27:05 	Employee logged in successfully
+level info: Aug-09-2023 18:33:40 	Employee logged in successfully
+level error: Aug-09-2023 18:55:45 	Employee Already Exists With This Email

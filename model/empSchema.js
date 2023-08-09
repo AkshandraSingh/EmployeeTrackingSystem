@@ -23,7 +23,7 @@ const empSchema = new mongoose.Schema({
     },
     empRole: {
         type: String,
-        requied: true
+        default: "employee"
     },
     empTechnology: {
         type: String,
@@ -40,9 +40,9 @@ const empSchema = new mongoose.Schema({
         type: String,
         requied: true
     },
-    workingStatus: {
+    workingStatus: { // ! bench and working
         type: String,
-        requied: true
+        default: "bench"
     },
     isActive: {
         type: Boolean,

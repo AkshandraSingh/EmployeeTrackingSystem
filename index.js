@@ -3,7 +3,7 @@ let express = require('express');
 let logger = require('./utils/logger')
 
 require('./config/modelConfig')
-let commanRouter = require('./routes/mainRoute')
+let commanRouter = require('./route')
 
 let app = express();
 app.use(express.json())

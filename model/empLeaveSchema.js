@@ -25,6 +25,14 @@ const empLeaves = new mongoose.Schema({
         type: String,
         default: ""
     },
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    endDate: {
+        type: Date,
+        required: true,
+    },
     empId: {
         type: mongoose.Types.ObjectId,
         ref: 'employee',

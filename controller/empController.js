@@ -1,12 +1,12 @@
 const bcrypt = require('bcrypt');
+const { unlinkSync } = require('fs');
 
 const empSchema = require("../model/empSchema");
-const { transporter } = require('../services/emailService'); // * It is For Send Email .
-const employeeLogger = require('../utils/employeeLogger'); // * Employee Logger for Save Information and Errors .
-const authService = require('../services/authService'); // * Some Services .
+const { transporter } = require('../services/emailService');
+const employeeLogger = require('../utils/employeeLogger'); 
+const authService = require('../services/authService'); 
 
 module.exports = {
-    // ? Create Employee
     singupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
         const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
@@ -43,8 +43,8 @@ module.exports = {
             })
         }
     },
-    // ? Login Employee
-    empLogIn: async (req, res) => {
+
+    logIn: async (req, res) => {
         const { empEmail, empPassword } = req.body // ! Taking these Parameter by Body .
         try {
             let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword) // ! Genrateing the Token and Ckeck is Email Exist or Not .
@@ -70,7 +70,7 @@ module.exports = {
             });
         }
     },
-    // ? Sending Email For Rest Password
+
     empSendEmailForResetPassword: async (req, res) => {
         const { empEmail } = req.body; // ? Taking Employee Email Form Body .
         try {
@@ -106,7 +106,6 @@ module.exports = {
         }
     },
 
-    // ? Employee Reset Paasword
     empResetPassword: async (req, res) => {
         const { id, token } = req.params;
         const { newPassword, confirmPassword } = req.body;
@@ -141,6 +140,43 @@ module.exports = {
             }
         } catch (error) {
             employeeLogger.log('error', `Error: ${error}`)
+            res.status(500).json({
+                success: false,
+                message: `Error occur : ${error.message}`,
+            });
+        }
+    },
+
+    editProfile: async (req, res) => {
+        try {
+            const empId = req.params.id;
+            const empData = await empSchema.findById(empId)
+            const salt = await bcrypt.genSalt(10)
+            if (req.body.empEmail) {
+                req.file ? unlinkSync(req.file.path) : null;
+                res.status(401).send({
+                    success: false,
+                    message: "You can't change your email ."
+                })
+            }
+            else {
+                const updateData = await empSchema.findByIdAndUpdate(empData._id, req.body, {
+                    new: true
+                });
+                const filePath = `/upload/${req.file.filename}`;
+                empData.empProfile = filePath;
+                if (req.body.empPassword) {
+                    empData.empPassword = await bcrypt.hash(req.body.empPassword, salt)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: "Your Profile Updated .",
+                    updatedData: updateData
+                })
+            }
+        }
+        catch (error) {
+            req.file ? unlinkSync(req.file.path) : null;
             res.status(500).json({
                 success: false,
                 message: `Error occur : ${error.message}`,
