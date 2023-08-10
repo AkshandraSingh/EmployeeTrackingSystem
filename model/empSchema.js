@@ -7,7 +7,8 @@ const empSchema = new mongoose.Schema({
     },
     empEmail: {
         type: String,
-        requied: true
+        requied: true,
+        unique: true,
     },
     empPhone: {
         type: Number,
@@ -20,6 +21,10 @@ const empSchema = new mongoose.Schema({
     empCity: {
         type: String,
         requied: true
+    },
+    empAddress: {
+        type: String,
+        default: "",
     },
     empRole: {
         type: String,
