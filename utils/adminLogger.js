@@ -1,7 +1,7 @@
 const { createLogger, transports, format } = require('winston')
 require('winston-mongodb')
 
-const empNotificationLogger = createLogger({
+const adminLogger = createLogger({
     transports: [
         new transports.Console({
             level: "info",
@@ -12,7 +12,7 @@ const empNotificationLogger = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
         new transports.File({
-            filename: 'logs/empNotification.log',
+            filename: 'logs/adminLog.log',
             level: "info",
             maxsize: 5242880,
             format: format.combine(
@@ -27,10 +27,10 @@ const empNotificationLogger = createLogger({
             options: {
                 useUnifedTopology: true,
             },
-            collection: 'empNotificationLog',
+            collection: 'adminLogData',
             format: format.combine(format.timestamp(), format.json())
         })
     ]
 })
 
-module.exports = empNotificationLogger
+module.exports = adminLogger

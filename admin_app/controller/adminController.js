@@ -1,5 +1,6 @@
 const empTimeSheet = require('../../model/empTimeSheetSchema')
 const empNotificationSchema = require("../../model/empNotificationSchema");
+const adminLogger = require('../../utils/adminLogger')
 
 module.exports = {
     empDashBoard: async (req, res) => {
@@ -20,12 +21,14 @@ module.exports = {
                     select: "empName",
                 })
                 .select("clockIn clockOut empId"); 
+            adminLogger.log('info',"All employee data founded! .")
             res.status(200).send({
                 success: true,
-                message: "All data founded!",
+                message: "All employee data founded! .",
                 empData: empData,
             });
         } catch (error) {
+            adminLogger.log('error',"Error occurred .")
             res.status(500).json({
                 success: false,
                 message: `Error occurred: ${error.message}`,
@@ -39,12 +42,14 @@ module.exports = {
         try {
             notificationData.empId = empId;
             await notificationData.save();
+            adminLogger.log('info',"Notification created .")
             res.status(201).json({
                 success: true,
                 message: "Notification created .",
                 notification: notificationData,
             });
         } catch (error) {
+            adminLogger.log('error',"Error occurs .")
             res.status(500).json({
                 success: false,
                 message: error.message,
