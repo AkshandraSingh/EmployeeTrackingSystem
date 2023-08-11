@@ -5,6 +5,7 @@ const empSchema = require("../../model/empSchema");
 const { transporter } = require('../services/emailService');
 const employeeLogger = require('../../utils/employeeLogger');
 const authService = require('../services/authService');
+const empNotiSchema = require('../../model/empNotificationSchema')
 
 module.exports = {
     singupEmployee: async (req, res) => {
@@ -71,7 +72,7 @@ module.exports = {
         }
     },
 
-    empSendEmailForResetPassword: async (req, res) => {
+    emailForgetPassword: async (req, res) => {
         const { empEmail } = req.body; // ? Taking Employee Email Form Body .
         try {
             let { generatedToken, empData } = await authService.validateEmployee(empEmail);
@@ -106,7 +107,7 @@ module.exports = {
         }
     },
 
-    empResetPassword: async (req, res) => {
+    forgetPassword: async (req, res) => {
         const { id, token } = req.params;
         const { newPassword, confirmPassword } = req.body;
         try {
@@ -149,43 +150,42 @@ module.exports = {
 
     editProfile: async (req, res) => {
         try {
-            const empId = req.params.id;
-            const empData = await empSchema.findById(empId);
-            if (req.body.empEmail) {
-                req.file ? unlinkSync(req.file.path) : null;
-                return res.status(401).send({
-                    success: false,
-                    message: "You can't change your email."
-                });
-            }
-            if (req.body.empAddress) {
-                empData.empAddress = req.body.empAddress;
-            }
-            if (req.body.empProfile) {}
-            const filePath = `/upload/${req.file.filename}`;
-            empData.empProfile = filePath;
-            const updateData = await empSchema.findByIdAndUpdate(
-                empData._id,
-                empData,
+            const employeeId = req.params.id;
+            const employeeAddress = req.body.empAddress;
+            const employeeCity = req.body.empCity;
+            const employeeState = req.body.empState;
+            const newProfilePic = req.file ? `/uploads/employeeProfilePic${req.file.filename}` : undefined;
+            const updatedEmployee = await empSchema.findByIdAndUpdate(
+                employeeId,
+                {
+                    empProfile: newProfilePic,
+                    empAddress: employeeAddress,
+                    empCity: employeeCity,
+                    empState: employeeState
+                },
                 { new: true }
             );
-            employeeLogger.log('info', "Your Profile Updated.");
-            res.status(200).send({
-                success: true,
-                message: "Your Profile Updated.",
-                updateData: updateData
-            });
-        }
-        catch (error) {
-            req.file ? unlinkSync(req.file.path) : null;
-            employeeLogger.log('error', "Error occurred.");
+            if (!updatedEmployee) {
+                employeeLogger.log("error", "Employee not found");
+                return res.status(404).json({
+                    success: false,
+                    message: "Employee not found",
+                });
+            } else {
+                employeeLogger.log("info", "Employee profile updated");
+                res.status(200).json({
+                    success: true,
+                    message: "Data updated ✔",
+                });
+            }
+        } catch (err) {
+            employeeLogger.log("error", err.message);
             res.status(500).json({
                 success: false,
-                message: `Error occurred: ${error.message}`,
+                error: err.message,
             });
         }
     },
-
 
     setNewPassword: async (req, res) => {
         try {
@@ -210,7 +210,7 @@ module.exports = {
                     employeeLogger.log('error', "old password is incorrect")
                     res.status(401).send({
                         success: false,
-                        message: "Old password is incorrect ."
+                        message: "Old password is incorrect . you can try forget password"
                     })
                 }
             }
@@ -227,6 +227,33 @@ module.exports = {
             res.status(500).json({
                 success: false,
                 message: `Error occur : ${error.message}`,
+            });
+        }
+    },
+
+    showNotification: async (req,res) => {
+        try {
+            const empId = req.params.id;
+            const notificationData = await empNotiSchema.find({empId})
+                .select('title message');
+            if (!notificationData) {
+                employeeLogger.log('error',"Notification not found .")
+                res.status(404).send({
+                    success: false,
+                    message: "Notification not found ."
+                });
+            } else {
+                res.status(200).send({
+                    success: true,
+                    message: "Notification for you .",
+                    data: notificationData
+                });
+            }
+        } catch (error) {
+            res.status(500).send({
+                success: false,
+                message: "Error!!",
+                error: error.message
             });
         }
     }

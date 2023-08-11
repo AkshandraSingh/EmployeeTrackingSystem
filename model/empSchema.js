@@ -36,6 +36,7 @@ const empSchema = new mongoose.Schema({
     },
     empProfile: {
         type: String,
+        default: ""
     },
     empState: {
         type: String,

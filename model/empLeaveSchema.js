@@ -9,6 +9,10 @@ const empLeaves = new mongoose.Schema({
         type: Number,
         default: 10
     },
+    otherLeaves: {
+        type: Number,
+        default: 10
+    },
     totalLeave: {
         type: Number,
         default: 0
@@ -27,11 +31,11 @@ const empLeaves = new mongoose.Schema({
     },
     startDate: {
         type: Date,
-        required: true,
+        default: "",
     },
     endDate: {
         type: Date,
-        required: true,
+        default:"",
     },
     empId: {
         type: mongoose.Types.ObjectId,

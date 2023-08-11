@@ -1,6 +1,9 @@
 const empTimeSheet = require('../../model/empTimeSheetSchema')
 const empNotificationSchema = require("../../model/empNotificationSchema");
+const leaveSchema = require('../../model/empLeaveSchema')
 const adminLogger = require('../../utils/adminLogger')
+const employeeSchema = require('../../model/empSchema')
+const emailService = require('../../service/emailService');
 
 module.exports = {
     empDashBoard: async (req, res) => {
@@ -20,15 +23,15 @@ module.exports = {
                     path: "empId",
                     select: "empName",
                 })
-                .select("clockIn clockOut empId"); 
-            adminLogger.log('info',"All employee data founded! .")
+                .select("clockIn clockOut empId");
+            adminLogger.log('info', "All employee data founded! .")
             res.status(200).send({
                 success: true,
                 message: "All employee data founded! .",
                 empData: empData,
             });
         } catch (error) {
-            adminLogger.log('error',"Error occurred .")
+            adminLogger.log('error', "Error occurred .")
             res.status(500).json({
                 success: false,
                 message: `Error occurred: ${error.message}`,
@@ -42,18 +45,84 @@ module.exports = {
         try {
             notificationData.empId = empId;
             await notificationData.save();
-            adminLogger.log('info',"Notification created .")
+            adminLogger.log('info', "Notification created .")
             res.status(201).json({
                 success: true,
                 message: "Notification created .",
                 notification: notificationData,
             });
         } catch (error) {
-            adminLogger.log('error',"Error occurs .")
+            adminLogger.log('error', "Error occurs .")
             res.status(500).json({
                 success: false,
                 message: error.message,
             });
         }
     },
+
+    showEmpLeaves: async (req, res) => {
+        try {
+            const leaveData = await leaveSchema.find().select('leaveType status message startDate endDate')
+                .populate({
+                    path: "empId",
+                    select: "empName",
+                })
+            res.status(200).send({
+                success: true,
+                message: "Employee leave details .",
+                data: leaveData
+            })
+        }
+        catch (error) {
+            adminLogger.log('error', "Error occurs .")
+            res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    },
+
+    empLeavePermit: async (req, res) => {
+        try {
+            const leaveSheetId = req.params.id;
+            const { status, message } = req.body;
+            const leaveData = await leaveSchema.findById(leaveSheetId);
+            if (leaveData.leaveType === "casual" || leaveData.leaveType === "sick") {
+                const empData = await employeeSchema.findById(leaveData.empId);
+                let subject = "";
+                const empEmail = empData.empEmail;
+                if (status === "approve") {
+                    subject = "Leave approved"
+                }
+                else {
+                    subject = "Leave rejected"
+                }
+                await emailService(empEmail, subject , status);
+                if (req.body.status === "approve") {
+                    leaveData.cusalLeaves = leaveData.cusalLeaves - 1;
+                    adminLogger.log('info',"Leave approved")
+                    return res.status(200).json({
+                        success: true,
+                        message: "Leave approved."
+                    });
+                } else {
+                    adminLogger.log('info', "Leave rejected")
+                    res.status(200).json({
+                        success: true,
+                        message: "Leave rejected."
+                    });
+                }
+            }
+            leaveData.status = status;
+            leaveData.message = message;
+            await leaveData.save();
+        } catch (error) {
+            adminLogger.log('error',"error Occour")
+            return res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
 }

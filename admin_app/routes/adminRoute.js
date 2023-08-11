@@ -12,5 +12,7 @@ const router = express.Router();
 router.post('/adminLogin', validator.loginEmpValidation ,authService.isAdmin,logIn)
 router.get('/empDashBoard',admin.empDashBoard)
 router.post('/createNotification/:id', adminNotiValidator.createNotification, admin.createNotification)
+router.get('/showEmpLeaves/:id',admin.showEmpLeaves)
+router.post('/empLeavePermit/:id', admin.empLeavePermit)
 
 module.exports = router

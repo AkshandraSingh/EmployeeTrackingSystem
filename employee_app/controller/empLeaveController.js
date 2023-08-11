@@ -4,25 +4,40 @@ const empLeaveLogger = require('../../utils/empLeaveLogger')
 module.exports = {
     empLeave: async (req, res) => {
         const empId = req.params.id;
+        const {startDate, endDate} = req.body
         const leaveData = new empLeaveSchema(req.body);
         try {
             leaveData.empId = empId;
-            await leaveData.save();
             if (leaveData.leaveType === "casual") {
-                empLeaveLogger.log('info',"Applied for casual leave")
-                res.status(201).json({
-                    success: true,
-                    message: "Applied for casual leave",
-                    leaveInfo: leaveData,
-                });
+                if (leaveData.cusalLeaves > 0) {
+                    await leaveData.save();
+                    empLeaveLogger.log('info', "Applied for casual leave")
+                    res.status(201).json({
+                        success: true,
+                        message: "Applied for casual leave",
+                        leaveInfo: leaveData,
+                    });
+                }
+                return res.status(401).send({
+                    success: false,
+                    message: "Your casual leaves are over , you can't apply"
+                })
             } else if (leaveData.leaveType === "sick") {
-                empLeaveLogger.log('info', "Applied for sick leave")
-                res.status(201).json({
-                    success: true,
-                    message: "Applied for sick leave",
-                    leaveInfo: leaveData,
-                });
+                if (leaveData.sickLeave > 0) {
+                    await leaveData.save();
+                    empLeaveLogger.log('info', "Applied for sick leave")
+                    res.status(201).json({
+                        success: true,
+                        message: "Applied for sick leave",
+                        leaveInfo: leaveData,
+                    });
+                }
+                return res.status(401).send({
+                    success: false,
+                    message: "Your sick leaves are over , you can't apply"
+                })
             } else {
+                await leaveData.save();
                 empLeaveLogger.log('info', "Applied for other leave")
                 res.status(201).json({
                     success: true,
@@ -30,10 +45,10 @@ module.exports = {
                     leaveInfo: leaveData,
                 });
             }
-            leaveData.startDate = req.body.startDate;
-            leaveData.endDate = req.body.endDate;
+            leaveData.startDate = startDate;
+            leaveData.endDate = endDate;
         } catch (error) {
-            empLeaveLogger.log('error',"Error Occor")
+            empLeaveLogger.log('error', "Error Occor")
             res.status(500).send({
                 success: false,
                 message: "Error!",
