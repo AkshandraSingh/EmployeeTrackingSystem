@@ -3,7 +3,7 @@ const empNotificationSchema = require("../../model/empNotificationSchema");
 const leaveSchema = require('../../model/empLeaveSchema')
 const adminLogger = require('../../utils/adminLogger')
 const employeeSchema = require('../../model/empSchema')
-const emailService = require('../../service/emailService');
+const mailOptions = require('../../service/emailService');
 
 module.exports = {
     empDashBoard: async (req, res) => {
@@ -97,7 +97,7 @@ module.exports = {
                 else {
                     subject = "Leave rejected"
                 }
-                await emailService(empEmail, subject , status);
+                await mailOptions(empEmail, subject , status);
                 if (req.body.status === "approve") {
                     leaveData.cusalLeaves = leaveData.cusalLeaves - 1;
                     adminLogger.log('info',"Leave approved")
@@ -124,5 +124,4 @@ module.exports = {
             });
         }
     }
-
 }

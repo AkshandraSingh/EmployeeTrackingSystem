@@ -62,9 +62,6 @@ const empSchema = {
         empTechnology: joi
             .string()
             .required(),
-        workingStatus: joi
-            .string()
-            .required(),
     }).unknown(true),
 
     loginEmployee: joi.object({

@@ -1,17 +1,22 @@
 const { transporter } = require('../employee_app/services/emailService');
 
-const emailSender = async (to, subject,status) => {
+const mailOptions = async (to, subject, status) => {
     await transporter.sendMail({
-        from: "nameste380@gmail.com",
+        from: '"Employee Tracking System" <nameste380@gmail.com>',
         to: to,
         subject: subject,
         html: `<!DOCTYPE html>
             <html lang="en">
 
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+
             <body>
-                <h1>Welcome to Employee Tracking System</h1>
+                <h1>Information about for your leave</h1>
                 <p>Your leave was ${status} by admin</p>
-                <p><a href="https://www.youtube.com/watch?v=dfKIpZ3jat4">Your Link</a></p>
+                <p><a href="link">Your Link</a></p>
             </body>
 
             </html>`
@@ -20,4 +25,4 @@ const emailSender = async (to, subject,status) => {
     return true;
 };
 
-module.exports = emailSender;
+module.exports = mailOptions;

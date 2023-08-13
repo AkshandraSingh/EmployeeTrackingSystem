@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { unlinkSync } = require('fs');
 
 const empSchema = require("../../model/empSchema");
 const { transporter } = require('../services/emailService');
@@ -10,7 +9,7 @@ const empNotiSchema = require('../../model/empNotificationSchema')
 module.exports = {
     singupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
-        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
+        const salt = await bcrypt.genSalt(10) // * It is a Algorithm to Incrypt the Password .
         try {
             let isEmailExist = await authService.isEmployeeExist(req.body.empEmail) // ! Checking is Email Exist or Not .
             if (isEmailExist) {
@@ -21,13 +20,11 @@ module.exports = {
                 });
             }
             else {
-                if (empData.empGender == 'male') { // ! It Check if Employee Gender is Male so It Give a Male Avtar .
-                    empData.empProfile = 'C:/Users/workspace/Employee Attendence Traking System/upload/maleAvatar.png'
-                } else { // ! It Check if Employee Gender is Female so It Give a Female Avtar .
-                    empData.empProfile = 'C:/Users/workspace/Employee Attendence Traking System/upload/femaleAvatar.png'
-                }
+                empData.empProfile = (empData.empGender === 'male') ?
+                    'C:/Users/workspace/Employee Attendence Traking System/upload/maleAvatar.png' :
+                    'C:/Users/workspace/Employee Attendence Traking System/upload/femaleAvatar.png';
                 empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It Incrupt the Password .
-                const employee = await empData.save() // ? Save in DataBase .
+                const employee = await empData.save() 
                 employeeLogger.log('info', "Employee Created Successfully")
                 res.status(201).json({
                     success: true,
@@ -46,8 +43,9 @@ module.exports = {
     },
 
     logIn: async (req, res) => {
-        const { empEmail, empPassword } = req.body // ! Taking these Parameter by Body .
+        const { empEmail, empPassword } = req.body
         try {
+            // ? Genrating the token and check the Password is incorrect or not .
             let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword)
             if (value) {
                 employeeLogger.log("info", "Employee logged in successfully");
@@ -56,7 +54,7 @@ module.exports = {
                     message: "Employee logged in successfully",
                     accessToken: generatedToken
                 });
-            } else { // ? It Show When Password is Incorrect .
+            } else { // * It Show When Password is Incorrect .
                 employeeLogger.log("error", "Email or password is not valid");
                 res.status(401).json({
                     success: false,
@@ -73,16 +71,16 @@ module.exports = {
     },
 
     emailForgetPassword: async (req, res) => {
-        const { empEmail } = req.body; // ? Taking Employee Email Form Body .
+        const { empEmail } = req.body; 
         try {
             let { generatedToken, empData } = await authService.validateEmployee(empEmail);
             if (empData) {
-                const link = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
-                let info = await transporter.sendMail({ // ! Sending the Email using Transpoter .
-                    from: "nameste380@gmail.com",
+                const resetLink = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
+                await transporter.sendMail({ 
+                    from: '"Employee Tracking System" <nameste380@gmail.com>',
                     to: empEmail,
-                    subject: "email for employee reset password",
-                    html: `<a href=${link}>click Here For Rest Password`
+                    subject: "email for employee to reset password",
+                    html: `<a href=${resetLink}>click Here For Rest Password`
                 });
                 employeeLogger.log('info', "Email Sent Successfully ❤")
                 res.status(201).json({
@@ -106,7 +104,7 @@ module.exports = {
             });
         }
     },
-
+    // ? Forget password API .
     forgetPassword: async (req, res) => {
         const { id, token } = req.params;
         const { newPassword, confirmPassword } = req.body;
@@ -152,19 +150,24 @@ module.exports = {
         try {
             const employeeId = req.params.id;
             const employeeAddress = req.body.empAddress;
-            const employeeCity = req.body.empCity;
-            const employeeState = req.body.empState;
-            const newProfilePic = req.file ? `/uploads/employeeProfilePic${req.file.filename}` : undefined;
+            let empTechnology = req.body.empTechnology ? `${req.body.empTechnology}` : undefined;
+            let empPhone = req.body.empPhone ? `${req.body.empPhone}` : undefined;
+            const empCity = req.body.empCity ? `${req.body.empCity}` : undefined;
+            const empState = req.body.empState ? `${req.body.empState}` : undefined;
+            const empProfile = req.file ? `/upload/empProfile${req.file.filename}` : undefined;
             const updatedEmployee = await empSchema.findByIdAndUpdate(
                 employeeId,
                 {
-                    empProfile: newProfilePic,
+                    empProfile: empProfile,
                     empAddress: employeeAddress,
-                    empCity: employeeCity,
-                    empState: employeeState
+                    empTechnology: empTechnology,
+                    empPhone: empPhone,
+                    empCity: empCity,
+                    empState: empState
                 },
                 { new: true }
             );
+
             if (!updatedEmployee) {
                 employeeLogger.log("error", "Employee not found");
                 return res.status(404).json({
@@ -172,10 +175,11 @@ module.exports = {
                     message: "Employee not found",
                 });
             } else {
-                employeeLogger.log("info", "Employee profile updated");
+                employeeLogger.log("info", "Employee profile edit successfully");
                 res.status(200).json({
                     success: true,
-                    message: "Data updated ✔",
+                    message: "Employee profile updated successfully ✔",
+                    user: updatedEmployee
                 });
             }
         } catch (err) {
@@ -231,18 +235,19 @@ module.exports = {
         }
     },
 
-    showNotification: async (req,res) => {
+    showNotification: async (req, res) => {
         try {
             const empId = req.params.id;
-            const notificationData = await empNotiSchema.find({empId})
-                .select('title message');
+            const notificationData = await empNotiSchema.find({ empId })
+                .select('title message createdAt');
             if (!notificationData) {
-                employeeLogger.log('error',"Notification not found .")
+                employeeLogger.log('error', "Notification not found .")
                 res.status(404).send({
                     success: false,
                     message: "Notification not found ."
                 });
             } else {
+                employeeLogger.log('info',"Notification founded .")
                 res.status(200).send({
                     success: true,
                     message: "Notification for you .",

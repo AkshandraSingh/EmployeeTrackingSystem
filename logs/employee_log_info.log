@@ -230,3 +230,28 @@ level error: Aug-11-2023 09:38:11 	employeeSchema is not defined
 level info: Aug-11-2023 09:38:29 	Profile pic and address updated successfully
 level info: Aug-11-2023 09:39:47 	Profile pic and address updated successfully
 level info: Aug-11-2023 09:40:15 	Profile pic and address updated successfully
+level info: Aug-12-2023 21:26:52 	Employee Created Successfully
+level info: Aug-12-2023 21:27:03 	User data updated successfully
+level error: Aug-12-2023 21:29:08 	Cast to string failed for value "[ 'Nada Nagar', 'Bhopal' ]" (type Array) at path "empCity"
+level info: Aug-12-2023 21:30:06 	User data updated successfully
+level info: Aug-12-2023 21:30:35 	User data updated successfully
+level info: Aug-12-2023 21:31:18 	User data updated successfully
+level info: Aug-12-2023 21:31:28 	User data updated successfully
+level error: Aug-12-2023 21:33:11 	Employee Already Exists With This Email
+level error: Aug-12-2023 21:33:16 	newProfilePic is not defined
+level info: Aug-12-2023 21:33:36 	User data updated successfully
+level info: Aug-12-2023 21:34:54 	User data updated successfully
+level info: Aug-12-2023 21:35:42 	User data updated successfully
+level info: Aug-12-2023 21:41:16 	User data updated successfully
+level info: Aug-12-2023 21:41:42 	User data updated successfully
+level info: Aug-12-2023 21:42:15 	User data updated successfully
+level error: Aug-12-2023 21:42:40 	Cast to ObjectId failed for value "64d7abc4fbd5e01b5b70040" (type string) at path "_id" for model "employee"
+level info: Aug-13-2023 09:08:13 	Employee Created Successfully
+level info: Aug-13-2023 09:08:52 	Employee Created Successfully
+level info: Aug-13-2023 09:12:59 	Email Sent Successfully ❤
+level info: Aug-13-2023 09:14:37 	Email Sent Successfully ❤
+level info: Aug-13-2023 20:30:33 	Notification founded .
+level info: Aug-13-2023 20:32:44 	Notification founded .
+level info: Aug-13-2023 20:44:22 	Notifications found.
+level info: Aug-13-2023 20:44:37 	Notifications found.
+level info: Aug-13-2023 20:48:44 	Notifications found.
