@@ -1,4 +1,4 @@
-const empNotification = require('./adminNotificationVal');
+const empNotification = require('./notificationVal');
 
 module.exports = {
     createNotification: async (req, res, next) => {

@@ -1,5 +1,4 @@
 const empTimeSheet = require('../../model/empTimeSheetSchema')
-const empNotificationSchema = require("../../model/empNotificationSchema");
 const leaveSchema = require('../../model/empLeaveSchema')
 const adminLogger = require('../../utils/adminLogger')
 const employeeSchema = require('../../model/empSchema')
@@ -39,27 +38,6 @@ module.exports = {
         }
     },
 
-    createNotification: async (req, res) => {
-        const empId = req.params.id;
-        const notificationData = new empNotificationSchema(req.body);
-        try {
-            notificationData.empId = empId;
-            await notificationData.save();
-            adminLogger.log('info', "Notification created .")
-            res.status(201).json({
-                success: true,
-                message: "Notification created .",
-                notification: notificationData,
-            });
-        } catch (error) {
-            adminLogger.log('error', "Error occurs .")
-            res.status(500).json({
-                success: false,
-                message: error.message,
-            });
-        }
-    },
-
     showEmpLeaves: async (req, res) => {
         try {
             const leaveData = await leaveSchema.find().select('leaveType status message startDate endDate')
@@ -91,16 +69,18 @@ module.exports = {
                 const empData = await employeeSchema.findById(leaveData.empId);
                 let subject = "";
                 const empEmail = empData.empEmail;
+                subject = status === "approve" ? "Leave approved" : "Leave rejected";
+                await mailOptions(empEmail, subject, status, message);
                 if (status === "approve") {
-                    subject = "Leave approved"
-                }
-                else {
-                    subject = "Leave rejected"
-                }
-                await mailOptions(empEmail, subject , status);
-                if (req.body.status === "approve") {
-                    leaveData.cusalLeaves = leaveData.cusalLeaves - 1;
-                    adminLogger.log('info',"Leave approved")
+                    if (leaveData.leaveType === 'casual') {
+                        leaveData.cusalLeaves = leaveData.cusalLeaves - 1
+                        leaveData.save()
+                    }
+                    else {
+                        leaveData.sickLeave = leaveData.sickLeave - 1
+                        leaveData.save()
+                    }
+                    adminLogger.log('info', "Leave approved")
                     return res.status(200).json({
                         success: true,
                         message: "Leave approved."
@@ -117,10 +97,36 @@ module.exports = {
             leaveData.message = message;
             await leaveData.save();
         } catch (error) {
-            adminLogger.log('error',"error Occour")
+            adminLogger.log('error', "error Occour")
             return res.status(500).json({
                 success: false,
                 message: error.message
+            });
+        }
+    },
+
+    searchEmployee: async (req, res) => {
+        try {
+            const { letter } = req.params;
+            const empData = await employeeSchema.find({
+                empRole: "employee",
+                $or: [
+                    { empName: { $regex: `${letter}`, $options: "i" } }, // ! Case-insensitive search
+                    { empEmail: { $regex: `${letter}`, $options: "i" } },
+                ],
+            }).select("empName empEmail workingStatus");
+            adminLogger.log('info', "Serched employees")
+            res.status(200).json({
+                success: true,
+                message: "Searched employees",
+                empData: empData,
+            });
+        } catch (error) {
+            adminLogger.log('error', "error Occour")
+            res.status(500).json({
+                success: false,
+                message: "Error!!",
+                error: error
             });
         }
     }

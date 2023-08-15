@@ -7,6 +7,7 @@ const authService = require('../services/authService');
 const empNotiSchema = require('../../model/empNotificationSchema')
 
 module.exports = {
+    // ! Create Employee 
     singupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
         const salt = await bcrypt.genSalt(10) // * It is a Algorithm to Incrypt the Password .
@@ -41,7 +42,7 @@ module.exports = {
             })
         }
     },
-
+    // ! LoginEmployee
     logIn: async (req, res) => {
         const { empEmail, empPassword } = req.body
         try {
@@ -69,7 +70,7 @@ module.exports = {
             });
         }
     },
-
+    // ! Sending email for reset the password 
     emailForgetPassword: async (req, res) => {
         const { empEmail } = req.body; 
         try {
@@ -104,7 +105,7 @@ module.exports = {
             });
         }
     },
-    // ? Forget password API .
+    // ! Forget password API .
     forgetPassword: async (req, res) => {
         const { id, token } = req.params;
         const { newPassword, confirmPassword } = req.body;
@@ -145,13 +146,13 @@ module.exports = {
             });
         }
     },
-
+    // ! Employee edit profile .
     editProfile: async (req, res) => {
         try {
             const employeeId = req.params.id;
             const employeeAddress = req.body.empAddress;
-            let empTechnology = req.body.empTechnology ? `${req.body.empTechnology}` : undefined;
-            let empPhone = req.body.empPhone ? `${req.body.empPhone}` : undefined;
+            const empTechnology = req.body.empTechnology ? `${req.body.empTechnology}` : undefined;
+            const empPhone = req.body.empPhone ? `${req.body.empPhone}` : undefined;
             const empCity = req.body.empCity ? `${req.body.empCity}` : undefined;
             const empState = req.body.empState ? `${req.body.empState}` : undefined;
             const empProfile = req.file ? `/upload/empProfile${req.file.filename}` : undefined;
@@ -190,7 +191,7 @@ module.exports = {
             });
         }
     },
-
+    // ! employee reset password
     setNewPassword: async (req, res) => {
         try {
             const empId = req.params.id;
@@ -234,23 +235,26 @@ module.exports = {
             });
         }
     },
-
+    // ! employee Notification
     showNotification: async (req, res) => {
         try {
             const empId = req.params.id;
-            const notificationData = await empNotiSchema.find({ empId })
-                .select('title message createdAt');
-            if (!notificationData) {
-                employeeLogger.log('error', "Notification not found .")
+            const { startDate, endDate } = req.query; 
+            const notificationData = await empNotiSchema.find({
+                empId,
+                createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+            }).select('title message createdAt');
+            if (notificationData.length === 0) {
+                employeeLogger.log('error', "Notifications not found.");
                 res.status(404).send({
                     success: false,
-                    message: "Notification not found ."
+                    message: "Notifications not found."
                 });
             } else {
-                employeeLogger.log('info',"Notification founded .")
+                employeeLogger.log('info', "Notifications found.");
                 res.status(200).send({
                     success: true,
-                    message: "Notification for you .",
+                    message: "Notifications for you.",
                     data: notificationData
                 });
             }
@@ -262,4 +266,5 @@ module.exports = {
             });
         }
     }
+
 }
