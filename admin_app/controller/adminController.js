@@ -85,7 +85,7 @@ module.exports = {
                     });
                 } else {
                     adminLogger.log('info', "Leave rejected")
-                    res.status(200).json({
+                    res.status(403).json({
                         success: true,
                         message: "Leave rejected."
                     });
