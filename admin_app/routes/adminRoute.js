@@ -11,7 +11,6 @@ const router = express.Router();
 router.post('/adminLogin', validator.loginEmpValidation ,authService.isAdmin,logIn)
 router.get('/empDashBoard',admin.empDashBoard)
 router.get('/showEmpLeaves/:id',admin.showEmpLeaves)
-router.post('/empLeavePermit/:id', admin.empLeavePermit)
-router.get('/searchEmployee/:letter',admin.searchEmployee)
+router.patch('/empLeavePermit/:id', admin.empLeavePermit)
 
 module.exports = router

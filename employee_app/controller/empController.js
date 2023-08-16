@@ -8,9 +8,9 @@ const empNotiSchema = require('../../model/empNotificationSchema')
 
 module.exports = {
     // ! Create Employee 
-    singupEmployee: async (req, res) => {
+    singupEmployee: async (req, res) => {           
         const empData = empSchema(req.body)
-        const salt = await bcrypt.genSalt(10) // * It is a Algorithm to Incrypt the Password .
+        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
         try {
             let isEmailExist = await authService.isEmployeeExist(req.body.empEmail) // ! Checking is Email Exist or Not .
             if (isEmailExist) {
@@ -191,7 +191,7 @@ module.exports = {
             });
         }
     },
-    // ! employee reset password
+    // ! employee reset password .
     setNewPassword: async (req, res) => {
         try {
             const empId = req.params.id;
@@ -239,7 +239,7 @@ module.exports = {
     showNotification: async (req, res) => {
         try {
             const empId = req.params.id;
-            const { startDate, endDate } = req.query; 
+            const { startDate, endDate } = req.query; // ! to use query we use ? it stands for giving query
             const notificationData = await empNotiSchema.find({
                 empId,
                 createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
@@ -266,5 +266,4 @@ module.exports = {
             });
         }
     }
-
 }

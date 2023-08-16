@@ -259,3 +259,35 @@ level info: Aug-15-2023 08:31:21 	Notifications found.
 level info: Aug-15-2023 08:31:46 	Notifications found.
 level error: Aug-15-2023 08:32:16 	Notifications not found.
 level info: Aug-15-2023 08:33:16 	Notifications found.
+level info: Aug-15-2023 20:48:54 	Notifications found.
+level info: Aug-15-2023 20:53:03 	Employee Created Successfully
+level info: Aug-15-2023 20:53:42 	Employee Created Successfully
+level info: Aug-15-2023 20:54:45 	Employee Created Successfully
+level info: Aug-15-2023 20:55:41 	Employee Created Successfully
+level info: Aug-15-2023 20:56:40 	Employee Created Successfully
+level info: Aug-15-2023 20:57:50 	Employee Created Successfully
+level info: Aug-15-2023 20:58:42 	Employee logged in successfully
+level info: Aug-15-2023 20:59:09 	Employee logged in successfully
+level info: Aug-15-2023 21:00:49 	Employee logged in successfully
+level info: Aug-15-2023 21:03:50 	Employee logged in successfully
+level info: Aug-15-2023 21:04:34 	Employee logged in successfully
+level info: Aug-15-2023 21:09:02 	Employee logged in successfully
+level info: Aug-15-2023 21:09:39 	Employee logged in successfully
+level info: Aug-15-2023 21:10:25 	Employee logged in successfully
+level info: Aug-15-2023 21:11:12 	Employee logged in successfully
+level info: Aug-15-2023 21:11:58 	Employee logged in successfully
+level info: Aug-15-2023 21:14:44 	Email Sent Successfully ❤
+level error: Aug-15-2023 21:15:23 	Error: TypeError: Cannot read properties of null (reading '_id')
+level info: Aug-15-2023 21:15:32 	Email Sent Successfully ❤
+level info: Aug-15-2023 21:17:27 	Password Updeted
+level error: Aug-15-2023 21:17:37 	Email or password is not valid
+level info: Aug-15-2023 21:18:11 	Employee profile edit successfully
+level info: Aug-15-2023 21:20:42 	Employee logged in successfully
+level info: Aug-15-2023 21:21:09 	Employee logged in successfully
+level info: Aug-16-2023 15:38:42 	Employee Created Successfully
+level error: Aug-16-2023 20:56:46 	Notifications not found.
+level error: Aug-16-2023 20:57:02 	Notifications not found.
+level info: Aug-16-2023 20:57:27 	Notifications found.
+level error: Aug-16-2023 20:57:35 	Notifications not found.
+level info: Aug-16-2023 20:57:44 	Notifications found.
+level info: Aug-16-2023 21:01:18 	Notifications found.
