@@ -13,6 +13,6 @@ router.post('/emailForReset', employee.emailForgetPassword)
 router.patch('/empResetPassword/:id/:token', authValidation.resetPasswordValidation, employee.forgetPassword)
 router.patch('/setNewPassword/:id', authValidation.setPasswordValidation, employee.setNewPassword)
 router.patch('/editProfile/:id', upload.single("empProfile"), employee.editProfile)
-router.get('/showNotification/:id', employee.showNotification)
+router.get('/showNotification', employee.showNotification)
 
 module.exports = router

@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
 
 const empSchema = require("../../model/empSchema");
-const { transporter } = require('../services/emailService');
 const employeeLogger = require('../../utils/employeeLogger');
 const authService = require('../services/authService');
-const empNotiSchema = require('../../model/empNotificationSchema')
+const empNotiSchema = require('../../model/empNotificationSchema');
+const emailService = require('../../service/emailService')
 
 module.exports = {
     // ! Create Employee 
-    singupEmployee: async (req, res) => {           
+    singupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
         const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
         try {
@@ -25,7 +25,7 @@ module.exports = {
                     'C:/Users/workspace/Employee Attendence Traking System/upload/maleAvatar.png' :
                     'C:/Users/workspace/Employee Attendence Traking System/upload/femaleAvatar.png';
                 empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It Incrupt the Password .
-                const employee = await empData.save() 
+                const employee = await empData.save()
                 employeeLogger.log('info', "Employee Created Successfully")
                 res.status(201).json({
                     success: true,
@@ -72,17 +72,12 @@ module.exports = {
     },
     // ! Sending email for reset the password 
     emailForgetPassword: async (req, res) => {
-        const { empEmail } = req.body; 
+        const { empEmail } = req.body;
         try {
             let { generatedToken, empData } = await authService.validateEmployee(empEmail);
             if (empData) {
                 const resetLink = `http://127.0.0.1:3000/employee/resetPassword/${empData._id}/${generatedToken}`;
-                await transporter.sendMail({ 
-                    from: '"Employee Tracking System" <nameste380@gmail.com>',
-                    to: empEmail,
-                    subject: "email for employee to reset password",
-                    html: `<a href=${resetLink}>click Here For Rest Password`
-                });
+                await emailService(empEmail, "reset password", resetLink)
                 employeeLogger.log('info', "Email Sent Successfully ❤")
                 res.status(201).json({
                     success: true,
@@ -119,7 +114,7 @@ module.exports = {
                     await empSchema.findByIdAndUpdate(checkEmployee._id, {
                         $set: { empPassword: bcryptPassword },
                     });
-                    employeeLogger.log('info', "Password Updeted")
+                    employeeLogger.log('info', "Password Updeted");
                     res.status(201).json({
                         success: true,
                         message: "Password Updeted",
@@ -238,10 +233,8 @@ module.exports = {
     // ! employee Notification
     showNotification: async (req, res) => {
         try {
-            const empId = req.params.id;
             const { startDate, endDate } = req.query; // ! to use query we use ? it stands for giving query
             const notificationData = await empNotiSchema.find({
-                empId,
                 createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
             }).select('title message createdAt');
             if (notificationData.length === 0) {
