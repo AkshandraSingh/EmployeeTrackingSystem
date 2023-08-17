@@ -3,24 +3,28 @@ const mongoose = require('mongoose')
 const empSchema = new mongoose.Schema({
     empName: {
         type: String,
-        requied: true
+        required: true
     },
     empEmail: {
         type: String,
-        requied: true,
+        required: true,
         unique: true,
     },
     empPhone: {
         type: Number,
-        requied: true
+        required: true
     },
     empPassword: {
         type: String,
-        requied: true
+        required: true
+    },
+    pastPassword: {
+        type: [],
+        default: []
     },
     empCity: {
         type: String,
-        requied: true
+        required: true
     },
     empAddress: {
         type: String,
@@ -32,7 +36,7 @@ const empSchema = new mongoose.Schema({
     },
     empTechnology: {
         type: String,
-        requied: true
+        required: true
     },
     empProfile: {
         type: String,
@@ -40,11 +44,11 @@ const empSchema = new mongoose.Schema({
     },
     empState: {
         type: String,
-        requied: true
+        required: true
     },
     empGender: {
         type: String,
-        requied: true
+        required: true
     },
     workingStatus: { // ! bench and working
         type: String,

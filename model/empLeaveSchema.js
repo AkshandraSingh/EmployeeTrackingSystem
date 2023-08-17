@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const empLeaves = new mongoose.Schema({
-    cusalLeaves: {
+    casualLeaves: {
         type: Number,
         default: 10
     },

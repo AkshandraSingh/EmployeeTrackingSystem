@@ -14,7 +14,7 @@ module.exports = {
             });
         } catch (error) {
             benchLogger.log('error',"Error!")
-            adminLogger.log('error', "error Occour");
+            adminLogger.log('error', "errors");
             return res.status(500).json({
                 success: false,
                 message: error.message

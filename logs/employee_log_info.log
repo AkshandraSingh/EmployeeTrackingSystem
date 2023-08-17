@@ -298,3 +298,24 @@ level info: Aug-17-2023 16:52:56 	Notifications found.
 level info: Aug-17-2023 17:11:50 	Notifications found.
 level info: Aug-17-2023 17:42:21 	Email Sent Successfully ❤
 level info: Aug-17-2023 17:44:23 	Email Sent Successfully ❤
+level error: Aug-17-2023 20:59:17 	Error: empPassword is not defined
+level info: Aug-17-2023 20:59:40 	Employee Created Successfully
+level info: Aug-17-2023 21:01:15 	Email Sent Successfully ❤
+level info: Aug-17-2023 21:02:03 	Password Updated
+level info: Aug-17-2023 21:02:12 	Password Updated
+level error: Aug-17-2023 21:04:22 	Password and ConfirmPassword is Not Correct
+level info: Aug-17-2023 21:05:42 	Password Updated
+level error: Aug-17-2023 21:08:00 	Error: TypeError: checkEmployee.pastPassword.length is not a function
+level info: Aug-17-2023 21:08:17 	Password Updated
+level info: Aug-17-2023 21:08:49 	Password Updated
+level info: Aug-17-2023 21:08:58 	Password Updated
+level info: Aug-17-2023 21:09:46 	Password Updated
+level info: Aug-17-2023 21:14:48 	Password Updated
+level info: Aug-17-2023 21:18:59 	Password Updated
+level info: Aug-17-2023 21:19:10 	Password Updated
+level info: Aug-17-2023 21:35:52 	Password Updated
+level error: Aug-17-2023 21:38:24 	Don't use old passwords, try another password
+level info: Aug-17-2023 21:49:11 	Employee password updated
+level error: Aug-17-2023 21:49:14 	old password is incorrect
+level error: Aug-17-2023 21:50:35 	Error Occurs 
+level error: Aug-17-2023 21:51:21 	This password you allready use in past

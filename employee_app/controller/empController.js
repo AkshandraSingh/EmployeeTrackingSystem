@@ -3,14 +3,14 @@ const bcrypt = require('bcrypt');
 const empSchema = require("../../model/empSchema");
 const employeeLogger = require('../../utils/employeeLogger');
 const authService = require('../services/authService');
-const empNotiSchema = require('../../model/empNotificationSchema');
+const empNotificationSchema = require('../../model/empNotificationSchema');
 const emailService = require('../../service/emailService')
 
 module.exports = {
     // ! Create Employee 
-    singupEmployee: async (req, res) => {
+    signupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
-        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to Incrypt the Password .
+        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to bcrypt the Password .
         try {
             let isEmailExist = await authService.isEmployeeExist(req.body.empEmail) // ! Checking is Email Exist or Not .
             if (isEmailExist) {
@@ -22,9 +22,10 @@ module.exports = {
             }
             else {
                 empData.empProfile = (empData.empGender === 'male') ?
-                    'C:/Users/workspace/Employee Attendence Traking System/upload/maleAvatar.png' :
-                    'C:/Users/workspace/Employee Attendence Traking System/upload/femaleAvatar.png';
-                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It Incrupt the Password .
+                    'C:/Users/workspace/Employee Attendence Tracking System/upload/maleAvatar.png' :
+                    'C:/Users/workspace/Employee Attendence Tracking System/upload/femaleAvatar.png';
+                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It bcrypt the Password .
+                empData.pastPassword.push(empData.empPassword)
                 const employee = await empData.save()
                 employeeLogger.log('info', "Employee Created Successfully")
                 res.status(201).json({
@@ -101,43 +102,52 @@ module.exports = {
         }
     },
     // ! Forget password API .
-    forgetPassword: async (req, res) => {
+    resetPassword: async (req, res) => {
         const { id, token } = req.params;
         const { newPassword, confirmPassword } = req.body;
+        let isPasswordExist = false;
         try {
             const checkEmployee = await empSchema.findById(id);
-            if (checkEmployee != null) {
-                const secretKey = checkEmployee._id + process.env.SECRET_KEY;
-                if (newPassword === confirmPassword) {
-                    const salt = await bcrypt.genSalt(10);
-                    const bcryptPassword = await bcrypt.hash(confirmPassword, salt);
-                    await empSchema.findByIdAndUpdate(checkEmployee._id, {
-                        $set: { empPassword: bcryptPassword },
-                    });
-                    employeeLogger.log('info', "Password Updeted");
-                    res.status(201).json({
-                        success: true,
-                        message: "Password Updeted",
-                    });
-                } else {
-                    employeeLogger.log('error', "Password and ConfirmPassword is Not Correct")
-                    res.status(403).json({
-                        success: false,
-                        message: "Password and ConfirmPassword is Not Correct",
-                    });
-                }
-            } else {
-                employeeLogger.log('error', "Your Email is Not Correct")
-                res.status(403).json({
+            if (!checkEmployee) {
+                return res.status(403).json({
                     success: false,
                     message: "Your Email is Not Correct",
                 });
             }
+            if (newPassword !== confirmPassword) {
+                employeeLogger.log('error', "Password and ConfirmPassword do not match")
+                return res.status(403).json({
+                    success: false,
+                    message: "Password and ConfirmPassword do not match",
+                });
+            }
+            for (const oldPassword of checkEmployee.pastPassword) {
+                if (await bcrypt.compare(newPassword, oldPassword)) {
+                    isPasswordExist = true;
+                    break;
+                }
+            }
+            if (isPasswordExist) {
+                employeeLogger.log('error',"Don't use old passwords, try another password")
+                return res.status(401).json({
+                    success: false,
+                    message: "Don't use old passwords, try another password",
+                });
+            }
+            const bcryptPassword = await bcrypt.hash(newPassword, salt);
+            checkEmployee.empPassword = bcryptPassword;
+            checkEmployee.pastPassword.push(bcryptPassword);
+            await checkEmployee.save();
+            employeeLogger.log('info', "Password Updated");
+            res.status(201).json({
+                success: true,
+                message: "Password Updated",
+            });
         } catch (error) {
             employeeLogger.log('error', `Error: ${error}`)
             res.status(500).json({
                 success: false,
-                message: `Error occur : ${error.message}`,
+                message: `Error occurred: ${error.message}`,
             });
         }
     },
@@ -192,11 +202,27 @@ module.exports = {
             const empId = req.params.id;
             const salt = await bcrypt.genSalt(10)
             const { oldPassword, newPassword, confirmPassword } = req.body;
+            let isPasswordExist = false
             const empData = await empSchema.findById(empId);
             const decryptPassword = await bcrypt.compare(oldPassword, empData.empPassword)
             if (newPassword === confirmPassword) {
                 if (decryptPassword) {
+                    for (const oldPassword of empData.pastPassword) {
+                        if (await bcrypt.compare(newPassword, oldPassword)) {
+                            isPasswordExist = true;
+                            break;
+                        }
+                    }
+                    if (isPasswordExist) {
+                        employeeLogger.log('error', "This password you allready use in past")
+                        return res.status(401).json({
+                            success: false,
+                            message: "This password you allready use in past",
+                        });
+                    }
                     const hashPassword = await bcrypt.hash(req.body.confirmPassword, salt)
+                    empData.pastPassword.push(hashPassword);
+                    await empData.save();
                     await empSchema.findByIdAndUpdate(empData._id, {
                         $set: { empPassword: hashPassword },
                     });
@@ -234,7 +260,7 @@ module.exports = {
     showNotification: async (req, res) => {
         try {
             const { startDate, endDate } = req.query; // ! to use query we use ? it stands for giving query
-            const notificationData = await empNotiSchema.find({
+            const notificationData = await empNotificationSchema.find({
                 createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
             }).select('title message createdAt');
             if (notificationData.length === 0) {

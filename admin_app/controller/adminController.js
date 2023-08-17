@@ -69,7 +69,7 @@ module.exports = {
                     if (leaveData.leaveType === 'casual') {
                         leaveData.status = status
                         leaveData.message = message
-                        leaveData.cusalLeaves = leaveData.cusalLeaves - 1
+                        leaveData.casualLeaves = leaveData.casualLeaves - 1
                         leaveData.save()
                     }
                     else {
@@ -95,7 +95,7 @@ module.exports = {
             leaveData.message = message;
             await leaveData.save();
         } catch (error) {
-            adminLogger.log('error', "error Occour")
+            adminLogger.log('error', "error!")
             return res.status(500).json({
                 success: false,
                 message: error.message
