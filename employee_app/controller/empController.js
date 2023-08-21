@@ -22,8 +22,8 @@ module.exports = {
             }
             else {
                 empData.empProfile = (empData.empGender === 'male') ?
-                    'C:/Users/workspace/Employee Attendence Tracking System/upload/maleAvatar.png' :
-                    'C:/Users/workspace/Employee Attendence Tracking System/upload/femaleAvatar.png';
+                    'C:/Users/workspace/Employee Attendance Tracking System/upload/maleAvatar.png' :
+                    'C:/Users/workspace/Employee Attendance Tracking System/upload/femaleAvatar.png';
                 empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It bcrypt the Password .
                 empData.pastPassword.push(empData.empPassword)
                 const employee = await empData.save()
@@ -47,7 +47,6 @@ module.exports = {
     logIn: async (req, res) => {
         const { empEmail, empPassword } = req.body
         try {
-            // ? Genrating the token and check the Password is incorrect or not .
             let { value, generatedToken } = await authService.validateEmployee(empEmail, empPassword)
             if (value) {
                 employeeLogger.log("info", "Employee logged in successfully");
@@ -135,7 +134,6 @@ module.exports = {
                 });
             }
             const bcryptPassword = await bcrypt.hash(newPassword, salt);
-            checkEmployee.empPassword = bcryptPassword;
             checkEmployee.pastPassword.push(bcryptPassword);
             await checkEmployee.save();
             employeeLogger.log('info', "Password Updated");
@@ -214,10 +212,10 @@ module.exports = {
                         }
                     }
                     if (isPasswordExist) {
-                        employeeLogger.log('error', "This password you allready use in past")
+                        employeeLogger.log('error', "This password you already use in past")
                         return res.status(401).json({
                             success: false,
-                            message: "This password you allready use in past",
+                            message: "This password you already use in past",
                         });
                     }
                     const hashPassword = await bcrypt.hash(req.body.confirmPassword, salt)

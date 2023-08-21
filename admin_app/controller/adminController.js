@@ -67,7 +67,7 @@ module.exports = {
                 await mailOptions(empEmail, subject, status, message);
                 if (status === "approve") {
                     if (leaveData.leaveType === 'casual') {
-                        leaveData.status = status
+                        leaveData.status = status 
                         leaveData.message = message
                         leaveData.casualLeaves = leaveData.casualLeaves - 1
                         leaveData.save()

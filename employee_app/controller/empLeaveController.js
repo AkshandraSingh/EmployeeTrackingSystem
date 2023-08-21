@@ -4,12 +4,12 @@ const empLeaveLogger = require('../../utils/empLeaveLogger')
 module.exports = {
     empLeave: async (req, res) => {
         const empId = req.params.id;
-        const {startDate, endDate} = req.body
+        const { startDate, endDate } = req.body
         const leaveData = new empLeaveSchema(req.body);
         try {
             leaveData.empId = empId;
             if (leaveData.leaveType === "casual") {
-                if (leaveData.cusalLeaves > 0) {
+                if (leaveData.casualLeaves > 0) {
                     await leaveData.save();
                     empLeaveLogger.log('info', "Applied for casual leave")
                     res.status(201).json({
@@ -48,7 +48,7 @@ module.exports = {
             leaveData.startDate = startDate;
             leaveData.endDate = endDate;
         } catch (error) {
-            empLeaveLogger.log('error', "Error Occor")
+            empLeaveLogger.log('error', "Error!")
             res.status(500).send({
                 success: false,
                 message: "Error!",
