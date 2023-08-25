@@ -12,7 +12,7 @@ module.exports = {
             const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
             const empIp = await ipService.ipAddress();
             const attendanceTime = moment('10:15:00', 'HH:mm:ss');
-            // ! Changeing Data .
+            // ! Change Data .
             empData.empId = empId;
             empData.clockIn = currentTime;
             empData.clockinIP = empIp;
@@ -38,7 +38,6 @@ module.exports = {
         }
     },
 
-
     employeeAttendance: async (req, res) => {
         try {
             const timeSheetId = req.params.id;
@@ -49,7 +48,7 @@ module.exports = {
             );
             const clockIn = moment(clockOutTime.clockIn, 'YYYY-MM-DD HH:mm:ss');
             const clockOut = moment(clockOutTime.clockOut, 'YYYY-MM-DD HH:mm:ss');
-            const hoursWorked = clockOut.diff(clockIn, 'hours'); // ! Taking difference between clockIn and clockOut in hours .
+            const hoursWorked = clockOut.diff(clockIn, 'hours');
             if (hoursWorked >= 8) {
                 clockOutTime.status = "present";
             }
@@ -75,29 +74,4 @@ module.exports = {
             });
         }
     },
-
-    empAttendance: async (req, res) => {
-        try {
-            const dayPresent = 0;
-            const employeeId = req.params.id;
-            const dashBoardData = timeSheetSchema.findById(employeeId);
-            console.log(dashBoardData)
-            if (dashBoardData.status === "present") {
-                dayPresent++
-            }
-            res.status(200).send({
-                success: true,
-                message: "Employee dash board .",
-                dayPresent: dayPresent
-            })
-        }
-        catch {
-            timeSheetLogger.info('error', "Error!")
-            res.status(500).send({
-                success: false,
-                message: "Error!",
-                error: error.message
-            })
-        }
-    }
 }

@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-        user: process.env.Email,
-        pass: process.env.PASS,
+        user: "nameste380@gmail.com",
+        pass: 'opqghvvvclampnyw',
     }
 });
 
@@ -44,7 +44,7 @@ const mailOptions = async (to, subject, status=0, message=0,link) => {
         }
         else {
             await transporter.sendMail({
-                from: '"Employee Tracking System" <nameste380@gmail.com>',
+                from: 'nameste380@gmail.com',
                 to: to,
                 subject: subject,
                 html: `<a href="${link}">Link for reset Password</a>`

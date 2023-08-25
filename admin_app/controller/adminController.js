@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const empTimeSheet = require('../../model/empTimeSheetSchema')
 const leaveSchema = require('../../model/empLeaveSchema')
 const adminLogger = require('../../utils/adminLogger')
@@ -66,25 +68,26 @@ module.exports = {
                 const empEmail = empData.empEmail;
                 await mailOptions(empEmail, subject, status, message);
                 if (status === "approve") {
+                    const startDate = moment(leaveData.startDate);
+                    const endDate = moment(leaveData.endDate);
+                    const leaveDuration = endDate.diff(startDate, 'days');
                     if (leaveData.leaveType === 'casual') {
-                        leaveData.status = status 
-                        leaveData.message = message
-                        leaveData.casualLeaves = leaveData.casualLeaves - 1
-                        leaveData.save()
+                        leaveData.status = status;
+                        leaveData.message = message;
+                        leaveData.casualLeaves -= leaveDuration; 
+                    } else {
+                        leaveData.status = status;
+                        leaveData.message = message;
+                        leaveData.sickLeave -= leaveDuration;
                     }
-                    else {
-                        leaveData.sickLeave = leaveData.sickLeave - 1
-                        leaveData.save()
-                    }
-                    leaveData.status = status
-                    leaveData.message = message
-                    adminLogger.log('info', "Leave approved")
+                    leaveData.save();
+                    adminLogger.log('info', "Leave approved");
                     return res.status(200).json({
                         success: true,
                         message: "Leave approved."
                     });
                 } else {
-                    adminLogger.log('info', "Leave rejected")
+                    adminLogger.log('info', "Leave rejected");
                     res.status(403).json({
                         success: true,
                         message: "Leave rejected."
@@ -95,7 +98,7 @@ module.exports = {
             leaveData.message = message;
             await leaveData.save();
         } catch (error) {
-            adminLogger.log('error', "error!")
+            adminLogger.log('error', "error!");
             return res.status(500).json({
                 success: false,
                 message: error.message
