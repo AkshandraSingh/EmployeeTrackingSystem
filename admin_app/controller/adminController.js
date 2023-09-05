@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const empTimeSheet = require('../../model/empTimeSheetSchema')
 const leaveSchema = require('../../model/empLeaveSchema')
-const adminLogger = require('../../utils/adminLogger')
+const adminLogger = require('../../utils/adminLogger/adminLogger')
 const employeeSchema = require('../../model/empSchema')
 const mailOptions = require('../../service/emailService');
 
@@ -74,7 +74,7 @@ module.exports = {
                     if (leaveData.leaveType === 'casual') {
                         leaveData.status = status;
                         leaveData.message = message;
-                        leaveData.casualLeaves -= leaveDuration; 
+                        leaveData.casualLeaves -= leaveDuration;
                     } else {
                         leaveData.status = status;
                         leaveData.message = message;

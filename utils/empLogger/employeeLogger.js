@@ -12,7 +12,7 @@ const employeeLogger = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
         new transports.File({
-            filename: 'logs/employee_log_info.log',
+            filename: 'logs/empLogs/empLog.log',
             level: "info",
             maxsize: 5242880,
             format: format.combine(
@@ -25,7 +25,7 @@ const employeeLogger = createLogger({
             level: "info",
             db: process.env.URL,
             options: {
-                useUnifedTopology: true,
+                useUnifiedTopology: true,
             },
             collection: 'empLogData',
             format: format.combine(format.timestamp(), format.json())

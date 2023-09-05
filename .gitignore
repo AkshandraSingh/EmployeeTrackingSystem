@@ -2,3 +2,4 @@
 \etsenv
 \.env
 \package-lock.json
+\.vscode

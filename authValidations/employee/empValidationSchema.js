@@ -1,16 +1,16 @@
-const joi = require('joi') 
-const { joiPasswordExtendCore } = require('joi-password'); 
+const joi = require('joi');
+const { joiPasswordExtendCore } = require('joi-password');
 const joiPassword = joi.extend(joiPasswordExtendCore);
 
-const empSchema = { 
+const empSchema = {
     registerEmployee: joi.object({
         empName: joi
             .string()
             .max(20)
             .min(3)
             .message({
-                "string-min": "{#lable} should be at least {#limit} characters",
-                "string-man": "{#lable} should be at least {#limit} characters",
+                "string.min": "{#label} should be at least {#limit} characters",
+                "string.max": "{#label} should be at most {#limit} characters",
             })
             .required(),
         empEmail: joi
@@ -18,8 +18,8 @@ const empSchema = {
             .email()
             .min(11)
             .message({
-                "string-min": "{#lable} should be at least {#limit} characters",
-                "string-man": "{#lable} should be at least {#limit} characters",
+                "string.min": "{#label} should be at least {#limit} characters",
+                "string.email": "{#label} should be a valid email address",
             })
             .required(),
         empPassword: joiPassword
@@ -32,12 +32,11 @@ const empSchema = {
             .onlyLatinCharacters()
             .messages({
                 'password.minOfUppercase': '{#label} should contain at least {#min} uppercase character',
-                'password.minOfSpecialCharacters':
-                    '{#label} should contain at least {#min} special character',
+                'password.minOfSpecialCharacters': '{#label} should contain at least {#min} special character',
                 'password.minOfLowercase': '{#label} should contain at least {#min} lowercase character',
                 'password.minOfNumeric': '{#label} should contain at least {#min} numeric character',
                 'password.noWhiteSpaces': '{#label} should not contain white spaces',
-                'password.onlyLatinCharacters': '{#label} should contain only latin characters',
+                'password.onlyLatinCharacters': '{#label} should contain only Latin characters',
             })
             .required(),
         empPhone: joi
@@ -46,8 +45,8 @@ const empSchema = {
             .min(1000000000)
             .max(9999999999)
             .message({
-                "string-min": "{#lable} should be at least {#limit} characters",
-                "string-man": "{#lable} should be at least {#limit} characters",
+                "number.min": "{#label} should be at least {#limit}",
+                "number.max": "{#label} should be at most {#limit}",
             })
             .required(),
         empCity: joi
@@ -94,4 +93,4 @@ const empSchema = {
     }),
 }
 
-module.exports = empSchema
+module.exports = empSchema;

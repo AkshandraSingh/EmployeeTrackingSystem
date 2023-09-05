@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const timeSheetSchema = require('../../model/empTimeSheetSchema');
-const timeSheetLogger = require('../../utils/timeSheetLogger')
+const timeSheetLogger = require('../../utils/timeSheetLogger/timeSheetLogger')
 const ipService = require('../services/ipService')
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
             if (empClockIn.isAfter(attendanceTime)) {
                 empData.dayLate = "Late";
             }
-            await empData.save(); 
+            await empData.save();
             timeSheetLogger.log('info', "ClockIn successfully!");
             res.status(201).json({
                 success: true,

@@ -6,7 +6,7 @@ module.exports = {
         const value = await empSchema.registerEmployee.validate(req.body, { abortEarly: false })
         if (value.error) {
             return res.status(403).json({
-                sucess: false,
+                success: false,
                 message: value.error.details[0].message
             })
         } else {
@@ -18,7 +18,7 @@ module.exports = {
         const value = await empSchema.loginEmployee.validate(req.body, { abortEarly: false })
         if (value.error) {
             return res.status(403).json({
-                sucess: false,
+                success: false,
                 message: value.error.details[0].message
             })
         } else {
@@ -30,7 +30,7 @@ module.exports = {
         const value = await empSchema.resetPassword.validate(req.body, { abortEarly: false })
         if (value.error) {
             return res.status(403).json({
-                sucess: false,
+                success: false,
                 message: value.error.details[0].message
             })
         } else {
@@ -42,7 +42,7 @@ module.exports = {
         const value = await empSchema.setNewPassword.validate(req.body, { abortEarly: false })
         if (value.error) {
             return res.status(403).json({
-                sucess: false,
+                success: false,
                 message: value.error.details[0].message
             })
         } else {

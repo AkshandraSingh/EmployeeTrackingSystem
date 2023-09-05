@@ -1,5 +1,5 @@
 const empNotificationSchema = require('../../model/empNotificationSchema')
-const notificationLogger = require('../../utils/notificationLogger')
+const notificationLogger = require('../../utils/notificationLogger/notificationLogger')
 
 module.exports = {
     createNotification: async (req, res) => {
@@ -8,14 +8,14 @@ module.exports = {
         try {
             notificationData.empId = empId;
             await notificationData.save();
-            notificationLogger.log('info',"Notification created .")
+            notificationLogger.log('info', "Notification created .")
             res.status(201).json({
                 success: true,
                 message: "Notification created .",
                 notification: notificationData,
             });
         } catch (error) {
-            notificationLogger.log('error',"Error!")
+            notificationLogger.log('error', "Error!")
             res.status(500).json({
                 success: false,
                 message: error.message,
@@ -25,9 +25,9 @@ module.exports = {
 
     updateNotification: async (req, res) => {
         const notificationId = req.params.id;
-        const notificationData = await empNotificationSchema.findByIdAndUpdate(notificationId,req.body,{new:true})
+        const notificationData = await empNotificationSchema.findByIdAndUpdate(notificationId, req.body, { new: true })
         try {
-            notificationLogger.log('info',"Notification updated .")
+            notificationLogger.log('info', "Notification updated .")
             res.status(201).json({
                 success: true,
                 message: "Notification updated .",
@@ -44,9 +44,9 @@ module.exports = {
 
     deleteNotification: async (req, res) => {
         const notificationId = req.params.id;
-        const notificationData = await empNotificationSchema.findByIdAndDelete(notificationId,{new:true});
+        const notificationData = await empNotificationSchema.findByIdAndDelete(notificationId, { new: true });
         try {
-            notificationLogger.log('info',"Notification deleted")
+            notificationLogger.log('info', "Notification deleted")
             res.status(200).json({
                 success: true,
                 message: "Notification deleted",

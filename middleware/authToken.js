@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const adminAuthetication = async (req, res, next) => {
+const adminAuthentication = async (req, res, next) => {
     const authHeader = req.headers.Authorization || req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer')) {
         let token = authHeader.split(' ')[1];
@@ -25,5 +25,5 @@ const adminAuthetication = async (req, res, next) => {
 
 
 module.exports = {
-    adminAuthetication
+    adminAuthentication
 }

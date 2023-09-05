@@ -1,19 +1,19 @@
 const employeeSchema = require('../../model/empSchema')
-const benchLogger = require('../../utils/benchLogger')
+const benchLogger = require('../../utils/benchLogger/benchLogger')
 
 module.exports = {
     empWorkingList: async (req, res) => {
         try {
             const empData = await employeeSchema.find()
                 .select('empName empEmail workingStatus updatedAt');
-            benchLogger.log('info',"Current employee")
+            benchLogger.log('info', "Current employee")
             res.status(200).send({
                 success: true,
                 message: "Current employee",
                 empData: empData
             });
         } catch (error) {
-            benchLogger.log('error',"Error!")
+            benchLogger.log('error', "Error!")
             adminLogger.log('error', "errors");
             return res.status(500).json({
                 success: false,

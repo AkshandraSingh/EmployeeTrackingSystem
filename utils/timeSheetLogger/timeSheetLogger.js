@@ -1,7 +1,7 @@
 const { createLogger, transports, format } = require('winston')
 require('winston-mongodb')
 
-const empLeaveLogger = createLogger({
+const timeSheetLogger = createLogger({
     transports: [
         new transports.Console({
             level: "info",
@@ -12,7 +12,7 @@ const empLeaveLogger = createLogger({
             format: format.combine(format.timestamp(), format.json())
         }),
         new transports.File({
-            filename: 'logs/empLeave.log',
+            filename: 'logs/timeSheetLogs/timeSheet.log',
             level: "info",
             maxsize: 5242880,
             format: format.combine(
@@ -25,12 +25,12 @@ const empLeaveLogger = createLogger({
             level: "info",
             db: process.env.URL,
             options: {
-                useUnifedTopology: true,
+                useUnifiedTopology: true,
             },
-            collection: 'empLeaveLog',
+            collection: 'TimeSheetLogData',
             format: format.combine(format.timestamp(), format.json())
         })
     ]
 })
 
-module.exports = empLeaveLogger
+module.exports = timeSheetLogger

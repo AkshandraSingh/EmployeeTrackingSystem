@@ -1,20 +1,19 @@
 const bcrypt = require('bcrypt');
 
 const empSchema = require("../../model/empSchema");
-const employeeLogger = require('../../utils/employeeLogger');
+const employeeLogger = require('../../utils/empLogger/employeeLogger');
 const authService = require('../services/authService');
 const empNotificationSchema = require('../../model/empNotificationSchema');
 const emailService = require('../../service/emailService')
 
 module.exports = {
-    // ! Create Employee 
     signupEmployee: async (req, res) => {
         const empData = empSchema(req.body)
-        const salt = await bcrypt.genSalt(10) // ! It is a Algorithm to bcrypt the Password .
+        const salt = await bcrypt.genSalt(10)
         try {
-            let isEmailExist = await authService.isEmployeeExist(req.body.empEmail) // ! Checking is Email Exist or Not .
+            let isEmailExist = await authService.isEmployeeExist(req.body.empEmail)
             if (isEmailExist) {
-                employeeLogger.log("error", "Employee Already Exists With This Email") // ? It Save Info in Employee log /
+                employeeLogger.log("error", "Employee Already Exists With This Email")
                 res.status(401).send({
                     success: false,
                     message: 'Employee Already Exists With This Email',
@@ -24,7 +23,7 @@ module.exports = {
                 empData.empProfile = (empData.empGender === 'male') ?
                     'C:/Users/workspace/Employee Attendance Tracking System/upload/maleAvatar.png' :
                     'C:/Users/workspace/Employee Attendance Tracking System/upload/femaleAvatar.png';
-                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt) // ! It bcrypt the Password .
+                empData.empPassword = await bcrypt.hash(req.body.empPassword, salt)
                 empData.pastPassword.push(empData.empPassword)
                 const employee = await empData.save()
                 employeeLogger.log('info', "Employee Created Successfully")
@@ -127,7 +126,7 @@ module.exports = {
                 }
             }
             if (isPasswordExist) {
-                employeeLogger.log('error',"Don't use old passwords, try another password")
+                employeeLogger.log('error', "Don't use old passwords, try another password")
                 return res.status(401).json({
                     success: false,
                     message: "Don't use old passwords, try another password",
@@ -257,7 +256,7 @@ module.exports = {
     // ! employee Notification
     showNotification: async (req, res) => {
         try {
-            const { startDate, endDate } = req.query; // ! to use query we use ? it stands for giving query
+            const { startDate, endDate } = req.query;
             const notificationData = await empNotificationSchema.find({
                 createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
             }).select('title message createdAt');

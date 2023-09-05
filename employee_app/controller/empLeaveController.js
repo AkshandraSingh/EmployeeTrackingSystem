@@ -1,5 +1,5 @@
 const empLeaveSchema = require("../../model/empLeaveSchema");
-const empLeaveLogger = require('../../utils/empLeaveLogger')
+const empLeaveLogger = require('../../utils/empLeaveLogger/empLeaveLogger')
 
 module.exports = {
     empLeave: async (req, res) => {
