@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const empSchema = require('../../model/empSchema')
 
 module.exports = {
-    // ! It is Only For Checking Email is Valid or Not .
     isEmployeeExist: async (email) => {
         let value = false
         const isEmpExits = await empSchema.findOne({
@@ -15,7 +14,6 @@ module.exports = {
         }
         return value
     },
-    // ! It is For Checking Email is Valid or Not and Compareing Password and also Genrating Token .
     validateEmployee: async (empEmail, hashType = 0) => {
         let value = false;
         const empData = await empSchema.findOne({ empEmail: empEmail });

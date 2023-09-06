@@ -27,7 +27,7 @@ module.exports = {
                 empData: empData,
             });
         } catch (error) {
-            adminLogger.log('error', "Error occurred.");
+            adminLogger.log('error', `Error occurred: ${error.message}`);
             res.status(500).json({
                 success: false,
                 message: `Error occurred: ${error.message}`,
@@ -49,7 +49,7 @@ module.exports = {
             })
         }
         catch (error) {
-            adminLogger.log('error', "Error occurs .")
+            adminLogger.log('error', `Error occurred: ${error.message}`);
             res.status(500).json({
                 success: false,
                 message: error.message,
@@ -98,7 +98,7 @@ module.exports = {
             leaveData.message = message;
             await leaveData.save();
         } catch (error) {
-            adminLogger.log('error', "error!");
+            adminLogger.log('error', `Error occurred: ${error.message}`);
             return res.status(500).json({
                 success: false,
                 message: error.message

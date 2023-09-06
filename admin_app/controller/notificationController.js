@@ -15,7 +15,7 @@ module.exports = {
                 notification: notificationData,
             });
         } catch (error) {
-            notificationLogger.log('error', "Error!")
+            notificationLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: error.message,
@@ -34,7 +34,7 @@ module.exports = {
                 notification: notificationData,
             });
         } catch (error) {
-            notificationLogger.log('error', "Error!")
+            notificationLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: error.message,
@@ -53,7 +53,7 @@ module.exports = {
                 notification: notificationData,
             });
         } catch (error) {
-            notificationLogger.log('error', "Error!")
+            notificationLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: error.message,

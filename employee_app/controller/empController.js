@@ -62,7 +62,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            employeeLogger.log("error", error.message);
+            employeeLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: error.message,
@@ -185,8 +185,8 @@ module.exports = {
                     user: updatedEmployee
                 });
             }
-        } catch (err) {
-            employeeLogger.log("error", err.message);
+        } catch (error) {
+            employeeLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 error: err.message,
@@ -246,7 +246,7 @@ module.exports = {
             }
         }
         catch (error) {
-            employeeLogger.log('error', "Error Occurs ")
+            employeeLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: `Error occur : ${error.message}`,
@@ -275,11 +275,12 @@ module.exports = {
                 });
             }
         } catch (error) {
+            employeeLogger.log('error', `Error: ${error.message}`)
             res.status(500).send({
                 success: false,
                 message: "Error!!",
                 error: error.message
             });
         }
-    }
+    },
 }

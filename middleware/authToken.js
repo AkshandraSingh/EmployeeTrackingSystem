@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const adminAuthentication = async (req, res, next) => {
+const authentication = async (req, res, next) => {
     const authHeader = req.headers.Authorization || req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer')) {
         let token = authHeader.split(' ')[1];
@@ -8,7 +8,7 @@ const adminAuthentication = async (req, res, next) => {
             if (err) {
                 res.status(401).json({
                     success: false,
-                    message: "Admin authentication Error!"
+                    message: "Authentication Error!"
                 });
             } else {
                 req.user = decoded.userData;
@@ -25,5 +25,5 @@ const adminAuthentication = async (req, res, next) => {
 
 
 module.exports = {
-    adminAuthentication
+    authentication
 }

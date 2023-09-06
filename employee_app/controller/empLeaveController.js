@@ -11,7 +11,6 @@ module.exports = {
             leaveData.empId = empId;
             leaveData.startDate = startDate;
             leaveData.endDate = endDate;
-
             if (leaveData.leaveType === "casual") {
                 if (leaveData.casualLeaves > 0) {
                     await leaveData.save();
@@ -50,7 +49,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            empLeaveLogger.log('error', "Error!");
+            empLeaveLogger.log('error', `Error: ${error.message}`);
             return res.status(500).send({
                 success: false,
                 message: "Error!",

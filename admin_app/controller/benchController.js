@@ -13,8 +13,7 @@ module.exports = {
                 empData: empData
             });
         } catch (error) {
-            benchLogger.log('error', "Error!")
-            adminLogger.log('error', "errors");
+            benchLogger.log('error', `Error: ${error.message}`)
             return res.status(500).json({
                 success: false,
                 message: error.message
@@ -36,11 +35,11 @@ module.exports = {
                 message: "Status updated successfully",
                 empData: empUpdate
             })
-        } catch (err) {
-            benchLogger.log('error', "Error!")
+        } catch (error) {
+            benchLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
-                message: `Error : ${err.message}`
+                message: `Error : ${error.message}`
             })
         }
     },
@@ -62,7 +61,7 @@ module.exports = {
                 empData: empData,
             });
         } catch (error) {
-            benchLogger.log('error', "Error!")
+            benchLogger.log('error', `Error: ${error.message}`)
             res.status(500).json({
                 success: false,
                 message: "Error!!",

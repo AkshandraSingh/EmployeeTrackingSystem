@@ -29,7 +29,7 @@ module.exports = {
                 message: "ClockIn successfully!"
             });
         } catch (error) {
-            timeSheetLogger.log('error', "Error!");
+            timeSheetLogger.log('error', `Error: ${error.message}`);
             res.status(500).json({
                 success: false,
                 message: "Error!",
@@ -66,7 +66,7 @@ module.exports = {
                 info: clockOutTime
             });
         } catch (error) {
-            timeSheetLogger.log('error', "Error!");
+            timeSheetLogger.log('error', `Error: ${error.message}`);
             res.status(500).send({
                 success: false,
                 message: "Error!",
